@@ -1,0 +1,90 @@
+---
+/**
+ * BaseLayout.astro — Root layout shell
+ *
+ * Used by every page. Provides:
+ * - <head> with SEO, fonts, global CSS, analytics
+ * - <body> structure ready for Header, main content, Footer
+ * - WhatsApp floating button (wired in Phase 2)
+ *
+ * Pages only need to provide SEO props + their <slot/> content.
+ */
+
+import SEO from '../components/SEO.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import WhatsAppButton from '../components/WhatsAppButton.astro'
+import CookieBanner from '../components/CookieBanner.astro'
+import '../styles/global.css'
+import type { SEOProps } from '../utils/seo'
+import type { WhatsAppContext } from '../data/site'
+
+interface Props extends SEOProps {
+  /** Sets the pre-filled message on the global floating WhatsApp button */
+  whatsappContext?: WhatsAppContext
+}
+
+const { title, description, image, noindex, canonicalURL, whatsappContext = 'default' } = Astro.props
+
+// Google Analytics ID from env (safe to expose — it's a public measurement ID)
+const gaId = import.meta.env.PUBLIC_GA_ID
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <!-- ─── SEO ──────────────────────────────────────────────────────────── -->
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      noindex={noindex}
+      canonicalURL={canonicalURL}
+    />
+
+    <!-- ─── Fonts (Google Fonts) ─────────────────────────────────────────── -->
+    <!-- Preconnect to reduce latency -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Inter (body) + Poppins (headings) — weights used across the design -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ─── Tracking helpers (safe stubs — GA only fires after cookie consent) ── -->
+    <!-- CookieBanner.astro injects the real gtag when the user accepts.         -->
+    <!-- These stubs guard against calls before consent is given.                -->
+    <script is:inline>
+      window.trackWhatsApp = function(context) {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'whatsapp_click', { event_category: 'CRO', page_context: context })
+        }
+      }
+      window.trackFormSubmit = function(formId) {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'form_submit', { event_category: 'CRO', form_id: formId })
+        }
+      }
+    </script>
+  </head>
+
+  <body class="min-h-screen flex flex-col bg-brand-white text-brand-black">
+    <!-- ─── Header ──────────────────────────────────────────────────────────── -->
+    <Header />
+
+    <!-- ─── Page content ──────────────────────────────────────────────────── -->
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <!-- ─── Footer ──────────────────────────────────────────────────────────── -->
+    <Footer />
+
+    <!-- ─── WhatsApp floating button (visible on all pages) ─────────────────── -->
+    <WhatsAppButton variant="floating" context={whatsappContext} />
+
+    <!-- ─── Cookie consent banner (GDPR — loads GA only after acceptance) ───── -->
+    <CookieBanner gaId={gaId} />
+  </body>
+</html>

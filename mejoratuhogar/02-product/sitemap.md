@@ -1,0 +1,14 @@
+# Sitemap
+- Inicio
+- Comprar vivienda
+- Vender vivienda
+- Alquiler
+- Ventanas PVC
+- Zonas
+  - Benicarló
+  - Vinaròs
+  - Peñíscola
+- Propiedades
+- Sobre nosotros
+- Blog
+- Contacto

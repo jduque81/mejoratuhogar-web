@@ -1,0 +1,334 @@
+---
+/**
+ * [slug].astro — Property detail page (/propiedades/[slug])
+ *
+ * Fully CMS-driven with static fallback.
+ * Two-column layout on desktop: content left, sticky sidebar right.
+ *
+ * Sections:
+ *   - Breadcrumb
+ *   - Image + gallery strip
+ *   - Key stats bar (price, beds, baths, area)
+ *   - Full description
+ *   - Features list
+ *   - Sidebar: price card + WhatsApp + ContactForm
+ *   - Similar properties
+ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import WhatsAppButton from '../../components/WhatsAppButton.astro'
+import ContactForm from '../../components/ContactForm.astro'
+import PropertyCard from '../../components/PropertyCard.astro'
+import CTABlock from '../../components/CTABlock.astro'
+import {
+  getAllPropertySlugs,
+  getPropertyBySlug,
+  getPropertiesByOperationType,
+} from '../../lib/sanity'
+import type { PropertyFull, PropertyCard as PropertyCardData } from '../../lib/sanity'
+import { FALLBACK_PROPERTIES, FALLBACK_PROPERTIES_FULL } from '../../data/fallback'
+import { sanityImageUrl } from '../../utils/image'
+import { formatPrice, formatArea, PROPERTY_TYPE_LABELS, OPERATION_TYPE_LABELS } from '../../utils/format'
+
+// ─── getStaticPaths ───────────────────────────────────────────────────────────
+
+export async function getStaticPaths() {
+  try {
+    const slugs = await getAllPropertySlugs()
+    if (slugs.length > 0) {
+      return slugs.map(({ slug }) => ({ params: { slug: slug.current } }))
+    }
+  } catch {}
+  // Fallback: mock slugs so the build doesn't fail
+  return FALLBACK_PROPERTIES.map((p) => ({ params: { slug: p.slug.current } }))
+}
+
+// ─── Page data ────────────────────────────────────────────────────────────────
+
+const { slug } = Astro.params as { slug: string }
+
+let property: PropertyFull | null = null
+let similarProperties: PropertyCardData[] = []
+
+try {
+  property = await getPropertyBySlug(slug)
+  if (property) {
+    const all = await getPropertiesByOperationType(property.operationType)
+    similarProperties = all.filter((p) => p._id !== property!._id).slice(0, 3)
+  }
+} catch {}
+
+// Static fallback
+if (!property) {
+  property = FALLBACK_PROPERTIES_FULL.find((p) => p.slug.current === slug)
+    ?? FALLBACK_PROPERTIES_FULL[0]
+    ?? null
+  if (!property) return Astro.redirect('/propiedades')
+  similarProperties = FALLBACK_PROPERTIES
+    .filter((p) => p._id !== property!._id && p.operationType === property!.operationType)
+    .slice(0, 3)
+}
+
+// ─── Derived values ───────────────────────────────────────────────────────────
+
+const isRent = property.operationType === 'rent'
+const mainImageUrl = sanityImageUrl(property.featuredImage, { width: 1200, height: 800 })
+const galleryImages = property.images ?? []
+const operationLabel = OPERATION_TYPE_LABELS[property.operationType]
+const typeLabel = PROPERTY_TYPE_LABELS[property.propertyType] ?? property.propertyType
+const priceFormatted = formatPrice(property.price, isRent)
+
+/**
+ * Extracts plain text from Sanity Portable Text block array.
+ * Rich-text rendering added post-MVP.
+ */
+function blocksToText(blocks?: any[]): string {
+  if (!blocks?.length) return ''
+  return blocks
+    .filter((b: any) => b._type === 'block')
+    .map((b: any) => (b.children ?? []).map((s: any) => s.text ?? '').join(''))
+    .filter(Boolean)
+    .join('\n\n')
+}
+
+const descriptionText = blocksToText(property.fullDescription) || property.shortDescription || ''
+
+const seoTitle = property.seoTitle ?? `${property.title} – ${operationLabel} en ${property.city.name}`
+const seoDescription = property.seoDescription ?? property.shortDescription ?? `${typeLabel} en ${operationLabel.toLowerCase()} en ${property.city.name}. ${priceFormatted}.`
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  whatsappContext="property"
+>
+
+  <!-- ─── Breadcrumb ────────────────────────────────────────────────────── -->
+  <nav class="bg-gray-50 border-b border-gray-100" aria-label="Ruta de navegación">
+    <div class="container max-w-6xl mx-auto py-3">
+      <ol class="flex items-center gap-2 text-sm text-gray-500 flex-wrap">
+        <li><a href="/" class="hover:text-brand-black transition-colors">Inicio</a></li>
+        <li aria-hidden="true">›</li>
+        <li>
+          <a href={isRent ? '/alquiler' : '/comprar'} class="hover:text-brand-black transition-colors">
+            {isRent ? 'Alquiler' : 'Comprar'}
+          </a>
+        </li>
+        {property.city?.name && (
+          <>
+            <li aria-hidden="true">›</li>
+            <li>
+              <a href={`/zonas/${property.city.slug.current}`} class="hover:text-brand-black transition-colors">
+                {property.city.name}
+              </a>
+            </li>
+          </>
+        )}
+        <li aria-hidden="true">›</li>
+        <li class="text-brand-black font-medium truncate max-w-[200px]" aria-current="page">
+          {property.title}
+        </li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ─── Main content ──────────────────────────────────────────────────── -->
+  <div class="container max-w-6xl mx-auto py-8 md:py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 lg:gap-12 items-start">
+
+      <!-- ─── Left: property content ──────────────────────────────────── -->
+      <div class="flex flex-col gap-8">
+
+        <!-- Main image -->
+        <div class="rounded-2xl overflow-hidden aspect-[16/9] bg-gray-100">
+          <img
+            src={mainImageUrl}
+            alt={property.featuredImage?.alt ?? property.title}
+            class="w-full h-full object-cover"
+            loading="eager"
+            decoding="async"
+            width="1200"
+            height="800"
+          />
+        </div>
+
+        <!-- Gallery grid -->
+        {galleryImages.length > 0 && (
+          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            {galleryImages.slice(0, 8).map((img, i) => (
+              <div class="aspect-[4/3] rounded-lg overflow-hidden bg-gray-100">
+                <img
+                  src={sanityImageUrl(img, { width: 400, height: 300 })}
+                  alt={img.alt ?? `Imagen ${i + 2} de ${property!.title}`}
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="300"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        <!-- Title + badges (mobile shows sidebar content inline) -->
+        <div class="flex flex-col gap-3">
+          <div class="flex flex-wrap gap-2">
+            <span class={`px-3 py-1 rounded-full text-xs font-semibold ${isRent ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-brand-green'}`}>
+              {operationLabel}
+            </span>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
+              {typeLabel}
+            </span>
+            {property.city?.name && (
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
+                📍 {property.city.name}
+              </span>
+            )}
+          </div>
+          <h1 class="font-heading font-bold text-2xl md:text-3xl text-brand-black leading-tight">
+            {property.title}
+          </h1>
+          {property.address && (
+            <p class="text-gray-500 text-sm">{property.address}</p>
+          )}
+        </div>
+
+        <!-- Stats bar -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 bg-gray-50 rounded-xl border border-gray-100">
+          <div class="flex flex-col gap-1 text-center">
+            <span class="font-heading font-bold text-brand-black text-xl">{priceFormatted}</span>
+            <span class="text-xs text-gray-500">{isRent ? 'Mensual' : 'Precio'}</span>
+          </div>
+          {property.bedrooms && (
+            <div class="flex flex-col gap-1 text-center">
+              <span class="font-heading font-bold text-brand-black text-xl">{property.bedrooms}</span>
+              <span class="text-xs text-gray-500">Habitaciones</span>
+            </div>
+          )}
+          {property.bathrooms && (
+            <div class="flex flex-col gap-1 text-center">
+              <span class="font-heading font-bold text-brand-black text-xl">{property.bathrooms}</span>
+              <span class="text-xs text-gray-500">Baños</span>
+            </div>
+          )}
+          {property.builtArea && (
+            <div class="flex flex-col gap-1 text-center">
+              <span class="font-heading font-bold text-brand-black text-xl">{formatArea(property.builtArea)}</span>
+              <span class="text-xs text-gray-500">Construidos</span>
+            </div>
+          )}
+        </div>
+
+        <!-- Description -->
+        {descriptionText && (
+          <div class="flex flex-col gap-3">
+            <h2 class="font-heading font-semibold text-brand-black text-lg">Descripción</h2>
+            <div class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+              {descriptionText}
+            </div>
+          </div>
+        )}
+
+        <!-- Features -->
+        {property.features && property.features.length > 0 && (
+          <div class="flex flex-col gap-3">
+            <h2 class="font-heading font-semibold text-brand-black text-lg">Características</h2>
+            <ul class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {property.features.map((f) => (
+                <li class="flex items-center gap-2 text-sm text-gray-700">
+                  <span class="text-brand-green font-bold text-xs" aria-hidden="true">✓</span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <!-- Mobile WhatsApp CTA -->
+        <div class="lg:hidden">
+          <WhatsAppButton variant="button" context="property" class="w-full justify-center" />
+        </div>
+
+      </div>
+
+      <!-- ─── Right: sticky sidebar ────────────────────────────────────── -->
+      <aside class="hidden lg:flex flex-col gap-6 sticky top-24">
+
+        <!-- Price card -->
+        <div class="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm">
+          <div class="flex flex-col gap-1 mb-5">
+            <span class="font-heading font-bold text-brand-black text-3xl">{priceFormatted}</span>
+            {property.city?.name && (
+              <span class="text-sm text-gray-500">📍 {property.city.name}</span>
+            )}
+          </div>
+
+          <!-- Quick stats -->
+          {(property.bedrooms || property.bathrooms || property.builtArea) && (
+            <div class="flex gap-4 text-sm text-gray-600 mb-5 pb-5 border-b border-gray-100">
+              {property.bedrooms && <span>{property.bedrooms} hab.</span>}
+              {property.bathrooms && <span>{property.bathrooms} baños</span>}
+              {property.builtArea && <span>{formatArea(property.builtArea)}</span>}
+            </div>
+          )}
+
+          <WhatsAppButton
+            variant="button"
+            context="property"
+            label="Preguntar por WhatsApp"
+            class="w-full justify-center mb-3"
+          />
+          <p class="text-xs text-center text-gray-400">Respuesta inmediata</p>
+        </div>
+
+        <!-- Contact form -->
+        <ContactForm
+          formId="property-contact"
+          variant="property"
+          title="Solicitar información"
+          description="Te contactamos en menos de 24h."
+          submitLabel="Enviar consulta"
+          whatsappContext="property"
+        />
+
+      </aside>
+    </div>
+
+    <!-- ─── Mobile contact form (below content) ─────────────────────────── -->
+    <div class="lg:hidden mt-10">
+      <ContactForm
+        formId="property-contact-mobile"
+        variant="property"
+        title="Solicitar información"
+        description="Te contactamos en menos de 24h."
+        submitLabel="Enviar consulta"
+        whatsappContext="property"
+      />
+    </div>
+  </div>
+
+  <!-- ─── Similar properties ────────────────────────────────────────────── -->
+  {similarProperties.length > 0 && (
+    <section class="py-14 md:py-20 bg-gray-50" aria-labelledby="similar-heading">
+      <div class="container max-w-6xl mx-auto">
+        <h2 id="similar-heading" class="font-heading font-bold text-2xl text-brand-black mb-8">
+          Propiedades similares
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {similarProperties.map((p) => <PropertyCard property={p} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ─── Final CTA ─────────────────────────────────────────────────────── -->
+  <CTABlock
+    title="¿Tienes alguna pregunta?"
+    subtitle="Estamos aquí para ayudarte. Contáctanos por WhatsApp o llámanos directamente."
+    ctaWhatsApp={{ label: 'Escribir por WhatsApp', context: 'property' }}
+    ctaPrimary={{ label: 'Ver más propiedades', href: isRent ? '/alquiler' : '/comprar' }}
+    variant="light"
+  />
+
+</BaseLayout>

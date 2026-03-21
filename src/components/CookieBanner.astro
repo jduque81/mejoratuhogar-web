@@ -1,0 +1,122 @@
+---
+/**
+ * CookieBanner.astro — Cookie consent banner
+ *
+ * Shown on first visit. Stores consent in localStorage.
+ * Loads Google Analytics only when the user accepts.
+ *
+ * Props:
+ *   gaId — PUBLIC_GA_ID from env. Passed in from BaseLayout.
+ *
+ * localStorage key: 'cookie_consent'
+ * Values: 'accepted' | 'rejected'
+ */
+
+interface Props {
+  gaId?: string
+}
+
+const { gaId } = Astro.props
+---
+
+<!-- Banner starts hidden; JS shows it only when no decision is stored -->
+<div
+  id="cookie-banner"
+  role="dialog"
+  aria-label="Aviso de cookies"
+  aria-live="polite"
+  style="display:none"
+  class="fixed bottom-0 left-0 right-0 z-[60] bg-brand-black border-t border-gray-700 shadow-2xl"
+>
+  <div class="container max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+
+    <p class="text-sm text-gray-300 leading-relaxed">
+      Utilizamos cookies para mejorar la experiencia y analizar el tráfico.
+      <a href="/cookies" class="text-brand-green hover:underline ml-1 whitespace-nowrap">Más información</a>
+    </p>
+
+    <div class="flex items-center gap-2 shrink-0">
+      <button
+        id="cookie-reject"
+        type="button"
+        class="px-4 py-2 text-sm font-semibold rounded-lg border border-gray-600 text-gray-300
+               hover:border-gray-400 hover:text-white transition-colors focus-visible:outline-2
+               focus-visible:outline-offset-2 focus-visible:outline-gray-400"
+      >
+        Rechazar
+      </button>
+      <button
+        id="cookie-accept"
+        type="button"
+        class="px-4 py-2 text-sm font-semibold rounded-lg bg-brand-green text-white
+               hover:bg-brand-green-dark transition-colors focus-visible:outline-2
+               focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+      >
+        Aceptar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script define:vars={{ gaId }}>
+  (function () {
+    var CONSENT_KEY = 'cookie_consent'
+    var banner      = document.getElementById('cookie-banner')
+    var btnAccept   = document.getElementById('cookie-accept')
+    var btnReject   = document.getElementById('cookie-reject')
+
+    // ─── Load GA dynamically ────────────────────────────────────────────────
+    function loadGA() {
+      if (!gaId) return
+
+      // Initialise the command queue before the script arrives
+      window.dataLayer = window.dataLayer || []
+      window.gtag = function () { window.dataLayer.push(arguments) }
+      window.gtag('js', new Date())
+      window.gtag('config', gaId)
+
+      // Inject the gtag.js script tag
+      var s = document.createElement('script')
+      s.async = true
+      s.src   = 'https://www.googletagmanager.com/gtag/js?id=' + gaId
+      document.head.appendChild(s)
+    }
+
+    // ─── Banner visibility ──────────────────────────────────────────────────
+    function hideBanner() {
+      if (banner) banner.style.display = 'none'
+    }
+    function showBanner() {
+      if (banner) banner.style.display = 'block'
+    }
+
+    // ─── Check stored consent on every page load ────────────────────────────
+    var stored = null
+    try { stored = localStorage.getItem(CONSENT_KEY) } catch (_) {}
+
+    if (stored === 'accepted') {
+      loadGA()          // returning visitor who accepted — load GA silently
+    } else if (stored === 'rejected') {
+      // returning visitor who rejected — do nothing
+    } else {
+      showBanner()      // first visit — ask for consent
+    }
+
+    // ─── Button handlers ────────────────────────────────────────────────────
+    if (btnAccept) {
+      btnAccept.addEventListener('click', function () {
+        try { localStorage.setItem(CONSENT_KEY, 'accepted') } catch (_) {}
+        hideBanner()
+        loadGA()
+      })
+    }
+
+    if (btnReject) {
+      btnReject.addEventListener('click', function () {
+        try { localStorage.setItem(CONSENT_KEY, 'rejected') } catch (_) {}
+        hideBanner()
+      })
+    }
+  })()
+</script>

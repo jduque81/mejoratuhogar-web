@@ -1,0 +1,110 @@
+---
+/**
+ * CTABlock.astro — Mid-page conversion section
+ *
+ * Props:
+ *   title        — section heading (required)
+ *   subtitle     — supporting text
+ *   ctaPrimary   — { label, href } — main link button
+ *   ctaWhatsApp  — { label, context } — WhatsApp button
+ *   variant      — 'light' | 'green' | 'dark' (background style)
+ *
+ * Rules (from CRO doc):
+ *   - At least one CTA must be present
+ *   - green variant used for highest-priority CTAs
+ *   - Centered layout, generous padding
+ */
+
+import WhatsAppButton from './WhatsAppButton.astro'
+import type { WhatsAppContext } from '../data/site'
+
+interface CTALink {
+  label: string
+  href: string
+}
+
+interface CTAWhatsApp {
+  label?: string
+  context: WhatsAppContext
+}
+
+interface Props {
+  title: string
+  subtitle?: string
+  ctaPrimary?: CTALink
+  ctaWhatsApp?: CTAWhatsApp
+  variant?: 'light' | 'green' | 'dark'
+}
+
+const {
+  title,
+  subtitle,
+  ctaPrimary,
+  ctaWhatsApp,
+  variant = 'light',
+} = Astro.props
+
+const bgClass = {
+  light: 'bg-gray-50',
+  green: 'bg-brand-green',
+  dark: 'bg-brand-black',
+}[variant]
+
+const titleClass = {
+  light: 'text-brand-black',
+  green: 'text-white',
+  dark: 'text-white',
+}[variant]
+
+const subtitleClass = {
+  light: 'text-gray-600',
+  green: 'text-green-100',
+  dark: 'text-gray-400',
+}[variant]
+
+// On green/dark backgrounds, primary button should be white/outlined
+const primaryBtnClass = {
+  light: 'btn-primary',
+  green: 'btn-secondary',
+  dark: 'btn-primary',
+}[variant]
+---
+
+<section class={`py-14 md:py-20 ${bgClass}`}>
+  <div class="container max-w-3xl mx-auto text-center">
+
+    <h2 class={`font-heading font-bold text-2xl md:text-3xl lg:text-4xl mb-4 ${titleClass}`}>
+      {title}
+    </h2>
+
+    {subtitle && (
+      <p class={`text-lg leading-relaxed mb-8 ${subtitleClass}`}>
+        {subtitle}
+      </p>
+    )}
+
+    {(ctaPrimary || ctaWhatsApp) && (
+      <div class="flex flex-wrap items-center justify-center gap-3">
+
+        {ctaPrimary && (
+          <a href={ctaPrimary.href} class={primaryBtnClass}>
+            {ctaPrimary.label}
+          </a>
+        )}
+
+        {ctaWhatsApp && (
+          <WhatsAppButton
+            variant="button"
+            context={ctaWhatsApp.context}
+            label={ctaWhatsApp.label}
+          />
+        )}
+
+      </div>
+    )}
+
+    <!-- Slot for extra content (e.g., trust badges, small print) -->
+    <slot />
+
+  </div>
+</section>

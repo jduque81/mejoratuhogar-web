@@ -1,0 +1,71 @@
+---
+/**
+ * ServiceCard.astro — Service overview card
+ *
+ * Props:
+ *   title      — service name (required)
+ *   description— short explanation
+ *   href       — destination link (required)
+ *   icon       — emoji or single character used as visual icon
+ *   ctaLabel   — link label (default: "Saber más →")
+ *   highlight  — if true, renders with green accent border (for featured service)
+ */
+
+interface Props {
+  title: string
+  description: string
+  href: string
+  icon: string
+  ctaLabel?: string
+  highlight?: boolean
+}
+
+const {
+  title,
+  description,
+  href,
+  icon,
+  ctaLabel = 'Saber más →',
+  highlight = false,
+} = Astro.props
+---
+
+<a
+  href={href}
+  class={`group flex flex-col gap-4 p-6 md:p-8 rounded-2xl bg-white border transition-all duration-200
+    hover:shadow-md hover:-translate-y-0.5
+    ${highlight
+      ? 'border-brand-green shadow-sm'
+      : 'border-gray-200'
+    }`}
+>
+  <!-- Icon -->
+  <span
+    class={`flex items-center justify-center w-12 h-12 rounded-xl text-2xl
+      ${highlight ? 'bg-brand-green text-white' : 'bg-gray-100 text-brand-black'}`}
+    aria-hidden="true"
+  >
+    {icon}
+  </span>
+
+  <!-- Title -->
+  <h3 class="font-heading font-semibold text-brand-black text-xl leading-snug">
+    {title}
+  </h3>
+
+  <!-- Description -->
+  <p class="text-gray-600 text-sm leading-relaxed flex-1">
+    {description}
+  </p>
+
+  <!-- CTA link -->
+  <span
+    class={`text-sm font-semibold transition-colors
+      ${highlight
+        ? 'text-brand-green group-hover:text-brand-green-dark'
+        : 'text-brand-black group-hover:text-brand-green'
+      }`}
+  >
+    {ctaLabel}
+  </span>
+</a>

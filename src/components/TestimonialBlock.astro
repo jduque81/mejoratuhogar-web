@@ -1,0 +1,154 @@
+---
+/**
+ * TestimonialBlock.astro — Customer testimonials display
+ *
+ * Props:
+ *   testimonials — Testimonial[] from Sanity (required)
+ *   variant      — 'grid' | 'single'
+ *                   grid:   responsive 1–3 column grid of all testimonials
+ *                   single: large featured quote (uses first testimonial)
+ *   title        — optional section heading
+ *   subtitle     — optional supporting text
+ */
+
+import type { Testimonial } from '../lib/sanity'
+
+interface Props {
+  testimonials: Testimonial[]
+  variant?: 'grid' | 'single'
+  title?: string
+  subtitle?: string
+}
+
+const {
+  testimonials,
+  variant = 'grid',
+  title,
+  subtitle,
+} = Astro.props
+
+const SERVICE_LABELS: Record<string, string> = {
+  buy: 'Compra de vivienda',
+  sell: 'Venta de vivienda',
+  rent: 'Alquiler',
+  'pvc-windows': 'Ventanas PVC',
+  other: 'Servicio general',
+}
+
+// For 'single' variant, use just the first testimonial
+const featured = testimonials[0]
+---
+
+{variant === 'single' && featured && (
+  <section class="py-14 md:py-20 bg-gray-50">
+    <div class="container max-w-3xl mx-auto text-center">
+
+      {/* Quote mark */}
+      <span class="text-brand-green text-6xl font-heading leading-none select-none" aria-hidden="true">"</span>
+
+      <blockquote class="mt-2">
+        <p class="text-xl md:text-2xl text-brand-black font-heading font-semibold leading-snug mb-6">
+          {featured.text}
+        </p>
+        <footer class="flex flex-col items-center gap-1">
+          {/* Stars */}
+          {featured.rating && (
+            <div class="flex gap-0.5 mb-2" aria-label={`${featured.rating} de 5 estrellas`}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill={i < (featured.rating ?? 0) ? '#2E7D32' : '#D1D5DB'}
+                  aria-hidden="true"
+                >
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              ))}
+            </div>
+          )}
+          <cite class="not-italic font-semibold text-brand-black text-base">{featured.name}</cite>
+          {(featured.city || featured.serviceType) && (
+            <span class="text-sm text-gray-500">
+              {featured.city}
+              {featured.city && featured.serviceType && ' · '}
+              {featured.serviceType && SERVICE_LABELS[featured.serviceType]}
+            </span>
+          )}
+        </footer>
+      </blockquote>
+
+    </div>
+  </section>
+)}
+
+{variant === 'grid' && testimonials.length > 0 && (
+  <section class="py-14 md:py-20 bg-brand-white">
+    <div class="container max-w-6xl mx-auto">
+
+      {/* Section header */}
+      {(title || subtitle) && (
+        <div class="text-center mb-10 md:mb-14">
+          {title && (
+            <h2 class="font-heading font-bold text-brand-black text-2xl md:text-3xl mb-3">
+              {title}
+            </h2>
+          )}
+          {subtitle && (
+            <p class="text-gray-600 text-lg max-w-xl mx-auto">{subtitle}</p>
+          )}
+        </div>
+      )}
+
+      {/* Grid */}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {testimonials.map((t) => (
+          <article class="flex flex-col gap-4 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+
+            {/* Stars */}
+            {t.rating && (
+              <div class="flex gap-0.5" aria-label={`${t.rating} de 5 estrellas`}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill={i < (t.rating ?? 0) ? '#2E7D32' : '#D1D5DB'}
+                    aria-hidden="true"
+                  >
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                ))}
+              </div>
+            )}
+
+            <blockquote>
+              <p class="text-gray-700 text-sm leading-relaxed italic flex-1">"{t.text}"</p>
+            </blockquote>
+
+            <footer class="flex items-center gap-3 pt-2 border-t border-gray-200 mt-auto">
+              {/* Avatar initials */}
+              <span class="flex items-center justify-center w-9 h-9 rounded-full bg-brand-green text-white font-heading font-bold text-sm shrink-0" aria-hidden="true">
+                {t.name.charAt(0).toUpperCase()}
+              </span>
+              <div>
+                <cite class="not-italic font-semibold text-brand-black text-sm">{t.name}</cite>
+                {(t.city || t.serviceType) && (
+                  <p class="text-xs text-gray-500">
+                    {t.city}
+                    {t.city && t.serviceType && ' · '}
+                    {t.serviceType && SERVICE_LABELS[t.serviceType]}
+                  </p>
+                )}
+              </div>
+            </footer>
+
+          </article>
+        ))}
+      </div>
+
+    </div>
+  </section>
+)}

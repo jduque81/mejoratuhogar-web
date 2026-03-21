@@ -1,0 +1,178 @@
+---
+/**
+ * privacidad.astro — Privacy policy (/privacidad)
+ *
+ * Required by Reglamento (UE) 2016/679 (RGPD) and
+ * Ley Orgánica 3/2018 de Protección de Datos (LOPDGDD).
+ *
+ * Fully static. No CMS data needed.
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { SITE } from '../data/site'
+
+const lastUpdated = '2025-01-01'
+---
+
+<BaseLayout
+  title="Política de Privacidad"
+  description="Información sobre cómo Mejora Tu Hogar trata tus datos personales, de conformidad con el RGPD y la LOPDGDD."
+  noindex={false}
+  whatsappContext="contact"
+>
+
+  <div class="bg-gray-50 border-b border-gray-100 py-8 md:py-10">
+    <div class="container max-w-3xl mx-auto">
+      <h1 class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-1">Política de Privacidad</h1>
+      <p class="text-sm text-gray-500">Última actualización: {lastUpdated}</p>
+    </div>
+  </div>
+
+  <article class="container max-w-3xl mx-auto py-12 md:py-16 flex flex-col gap-10 text-gray-700 leading-relaxed">
+
+    <!-- ─── 1. Responsable ────────────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">1. Responsable del tratamiento</h2>
+      <table class="w-full text-sm border-collapse">
+        <tbody>
+          {[
+            ['Responsable', 'Iryna Matuzko'],
+            ['DNI / NIE', 'Y4956886D'],
+            ['Denominación comercial', SITE.name],
+            ['Domicilio', SITE.address],
+            ['Correo electrónico', SITE.email],
+          ].map(([label, value]) => (
+            <tr class="border-b border-gray-100">
+              <td class="py-2.5 pr-4 font-medium text-brand-black w-48 align-top">{label}</td>
+              <td class="py-2.5 text-gray-600">{value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ─── 2. Datos recogidos ─────────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">2. Datos personales que recogemos</h2>
+      <p>A través de los formularios de contacto del sitio web recogemos los siguientes datos:</p>
+      <ul class="list-disc list-inside flex flex-col gap-1 ml-2 text-sm">
+        <li><strong>Nombre</strong> — identificación del interesado.</li>
+        <li><strong>Teléfono</strong> — para contactar y concertar visitas.</li>
+        <li><strong>Correo electrónico</strong> — para responder consultas escritas (cuando se facilita).</li>
+        <li><strong>Mensaje</strong> — descripción de la consulta o necesidad del interesado.</li>
+      </ul>
+      <p class="text-sm">
+        No recogemos datos de categorías especiales (salud, origen racial, creencias religiosas, etc.).
+      </p>
+    </section>
+
+    <!-- ─── 3. Finalidad ──────────────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">3. Finalidad del tratamiento</h2>
+      <p>Tratamos tus datos personales con las siguientes finalidades:</p>
+      <ul class="list-disc list-inside flex flex-col gap-1 ml-2 text-sm">
+        <li>Atender y gestionar las consultas recibidas a través del formulario de contacto.</li>
+        <li>Facilitar información sobre los inmuebles y servicios solicitados.</li>
+        <li>Concertar visitas, valoraciones y presupuestos.</li>
+        <li>Mantener la relación contractual cuando se contrate algún servicio.</li>
+      </ul>
+    </section>
+
+    <!-- ─── 4. Base jurídica ───────────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">4. Base jurídica del tratamiento</h2>
+      <p>
+        La base jurídica del tratamiento es el <strong>consentimiento del interesado</strong> (art. 6.1.a RGPD),
+        otorgado al marcar la casilla de aceptación de la política de privacidad en el formulario de contacto,
+        y la <strong>ejecución de medidas precontractuales</strong> solicitadas por el interesado (art. 6.1.b RGPD).
+      </p>
+      <p>
+        El consentimiento es en todo momento revocable sin que ello afecte a la licitud del tratamiento
+        anterior a su retirada.
+      </p>
+    </section>
+
+    <!-- ─── 5. Destinatarios ───────────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">5. Destinatarios y encargados del tratamiento</h2>
+      <p>
+        No cedemos tus datos personales a terceros salvo obligación legal. Como encargados del tratamiento
+        utilizamos los siguientes servicios:
+      </p>
+      <ul class="list-disc list-inside flex flex-col gap-2 ml-2 text-sm">
+        <li>
+          <strong>Google LLC (Google Analytics)</strong> — análisis de tráfico web. Google puede transferir datos
+          a servidores en EE.UU. bajo el marco Privacy Shield / Cláusulas Contractuales Tipo.
+          Más información en <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-green hover:underline">policies.google.com/privacy</a>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- ─── 6. Plazo de conservación ──────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">6. Plazo de conservación</h2>
+      <p>
+        Los datos se conservarán mientras exista una relación activa o durante el tiempo necesario para
+        atender la consulta recibida. Transcurrido dicho período, los datos se bloquearán y conservarán
+        únicamente a disposición de las Administraciones Públicas, Jueces y Tribunales durante los plazos
+        de prescripción aplicables (con carácter general, 5 años).
+      </p>
+    </section>
+
+    <!-- ─── 7. Derechos ───────────────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">7. Tus derechos</h2>
+      <p>Tienes derecho a:</p>
+      <ul class="list-disc list-inside flex flex-col gap-1 ml-2 text-sm">
+        <li><strong>Acceso</strong> — conocer qué datos tratamos sobre ti.</li>
+        <li><strong>Rectificación</strong> — solicitar la corrección de datos inexactos.</li>
+        <li><strong>Supresión</strong> — solicitar la eliminación de tus datos («derecho al olvido»).</li>
+        <li><strong>Oposición</strong> — oponerte al tratamiento de tus datos.</li>
+        <li><strong>Limitación</strong> — solicitar la restricción del tratamiento.</li>
+        <li><strong>Portabilidad</strong> — recibir tus datos en formato estructurado y de uso común.</li>
+      </ul>
+      <p class="text-sm">
+        Puedes ejercer estos derechos enviando un correo electrónico a{' '}
+        <a href={`mailto:${SITE.email}`} class="text-brand-green hover:underline">{SITE.email}</a>{' '}
+        con el asunto <em>"Derechos RGPD"</em> y adjuntando copia de tu documento de identidad.
+        Responderemos en el plazo máximo de un mes.
+      </p>
+    </section>
+
+    <!-- ─── 8. Reclamaciones ───────────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">8. Derecho a presentar reclamaciones</h2>
+      <p>
+        Si consideras que el tratamiento de tus datos no es el adecuado, tienes derecho a presentar una
+        reclamación ante la Agencia Española de Protección de Datos (AEPD) a través de su sitio web
+        <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer" class="text-brand-green hover:underline">www.aepd.es</a>.
+      </p>
+    </section>
+
+    <!-- ─── 9. Contacto ───────────────────────────────────────────────── -->
+    <section class="flex flex-col gap-3 p-6 bg-gray-50 rounded-xl border border-gray-100">
+      <h2 class="font-heading font-bold text-lg text-brand-black">Contacto sobre privacidad</h2>
+      <p class="text-sm">
+        Para cualquier consulta relacionada con esta política de privacidad o el ejercicio de tus derechos,
+        contacta con nosotros en:
+      </p>
+      <ul class="text-sm flex flex-col gap-1">
+        <li>
+          <strong>Email:</strong>{' '}
+          <a href={`mailto:${SITE.email}`} class="text-brand-green hover:underline">{SITE.email}</a>
+        </li>
+        <li><strong>Teléfono:</strong> <a href={`tel:${SITE.phone.replace(/\s/g,'')}`} class="text-brand-green hover:underline">{SITE.phone}</a></li>
+        <li><strong>Dirección:</strong> {SITE.address}</li>
+      </ul>
+    </section>
+
+    <!-- ─── Back link ──────────────────────────────────────────────────── -->
+    <div class="pt-4 border-t border-gray-100 flex gap-6 text-sm">
+      <a href="/" class="text-brand-green hover:underline">← Volver al inicio</a>
+      <a href="/aviso-legal" class="text-gray-500 hover:text-brand-black">Aviso legal</a>
+      <a href="/cookies" class="text-gray-500 hover:text-brand-black">Política de cookies</a>
+    </div>
+
+  </article>
+
+</BaseLayout>

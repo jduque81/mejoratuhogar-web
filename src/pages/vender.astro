@@ -1,0 +1,182 @@
+---
+/**
+ * vender.astro — Sell Property page (/vender)
+ *
+ * CRITICAL: highest revenue page. Every section drives toward a lead.
+ *
+ * Sections:
+ *   1. Hero — "Valoración gratuita", WhatsApp CTA
+ *   2. Lead form + trust block — the main conversion pair
+ *   3. How it works — 5-step process
+ *   4. Testimonial — single featured quote
+ *   5. Final CTA — phone + WhatsApp
+ *
+ * CMS data: getServiceByType('sell'), getFeaturedTestimonials()
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroSection from '../components/HeroSection.astro'
+import ContactForm from '../components/ContactForm.astro'
+import TestimonialBlock from '../components/TestimonialBlock.astro'
+import CTABlock from '../components/CTABlock.astro'
+import WhatsAppButton from '../components/WhatsAppButton.astro'
+import { getServiceByType, getFeaturedTestimonials } from '../lib/sanity'
+import { FALLBACK_TESTIMONIALS } from '../data/fallback'
+import { SITE } from '../data/site'
+import type { Testimonial } from '../lib/sanity'
+
+// ─── CMS data with fallback ───────────────────────────────────────────────────
+
+let testimonials: Testimonial[] = []
+try {
+  testimonials = await getFeaturedTestimonials()
+} catch {}
+if (!testimonials.length) testimonials = FALLBACK_TESTIMONIALS
+
+// ─── Static process steps ─────────────────────────────────────────────────────
+
+const steps = [
+  { step: '01', title: 'Contacta con nosotros', text: 'Llámanos, escríbenos por WhatsApp o rellena el formulario. Respondemos en menos de 24h.' },
+  { step: '02', title: 'Valoración gratuita', text: 'Visitamos tu vivienda y te damos una valoración real de mercado, sin compromiso.' },
+  { step: '03', title: 'Publicamos tu propiedad', text: 'Creamos un anuncio profesional con fotos de calidad y lo publicamos en los principales portales.' },
+  { step: '04', title: 'Gestionamos las visitas', text: 'Coordinamos todas las visitas y te informamos de cada interesado. Tú decides.' },
+  { step: '05', title: 'Cerramos la venta', text: 'Te acompañamos hasta la firma ante notario. Tú cobras al mejor precio posible.' },
+]
+
+// ─── Trust stats ─────────────────────────────────────────────────────────────
+
+const stats = [
+  { value: '30 días', label: 'Tiempo medio de venta' },
+  { value: '100+', label: 'Propiedades vendidas' },
+  { value: '98%', label: 'Clientes satisfechos' },
+]
+---
+
+<BaseLayout
+  title="Vender tu Vivienda en Castellón – Valoración Gratuita"
+  description="¿Quieres vender tu vivienda en Castellón? Solicita una valoración gratuita sin compromiso. Expertos locales, venta rápida y al mejor precio."
+  whatsappContext="sell"
+>
+
+  <!-- ─── 1. Hero ────────────────────────────────────────────────────────── -->
+  <HeroSection
+    title="Vende tu vivienda al mejor precio"
+    subtitle="Valoración gratuita sin compromiso. Te acompañamos en todo el proceso y conseguimos el precio que mereces."
+    badge="Valoración gratuita"
+    ctaWhatsApp={{ label: 'Hablar con un experto', context: 'sell' }}
+    ctaPrimary={{ label: 'Solicitar valoración', href: '#formulario' }}
+  >
+    <!-- Stats row -->
+    <div class="flex flex-wrap gap-6 mt-2">
+      {stats.map((s) => (
+        <div class="flex flex-col">
+          <span class="font-heading font-bold text-brand-green text-2xl">{s.value}</span>
+          <span class="text-sm text-gray-500">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </HeroSection>
+
+  <!-- ─── 2. Form + trust ───────────────────────────────────────────────── -->
+  <section id="formulario" class="py-16 md:py-20 bg-gray-50" aria-labelledby="form-heading">
+    <div class="container max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+
+        <!-- Form -->
+        <div>
+          <ContactForm
+            formId="vender-form"
+            variant="lead"
+            title="Solicita tu valoración gratuita"
+            description="Rellena el formulario y te llamamos en menos de 24h. Sin compromiso."
+            submitLabel="Quiero vender mi vivienda"
+            whatsappContext="sell"
+          />
+        </div>
+
+        <!-- Trust block -->
+        <div class="flex flex-col gap-8">
+          <div>
+            <h2 id="form-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-4">
+              ¿Por qué vender con nosotros?
+            </h2>
+            <ul class="flex flex-col gap-4">
+              {[
+                'Valoración honesta basada en el mercado real',
+                'Publicación en los principales portales inmobiliarios',
+                'Gestión completa: fotos, visitas y papeleo',
+                'Sin costes ocultos ni sorpresas al final',
+                'Asesoramiento legal durante todo el proceso',
+              ].map((item) => (
+                <li class="flex items-start gap-3 text-gray-700 text-sm">
+                  <span class="flex items-center justify-center w-5 h-5 rounded-full bg-brand-green text-white text-xs font-bold shrink-0 mt-0.5" aria-hidden="true">✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Urgency block -->
+          <div class="p-5 bg-white border border-brand-green rounded-xl">
+            <p class="text-sm font-semibold text-brand-black mb-1">¿Prefieres llamarnos ahora?</p>
+            <a
+              href={`tel:${SITE.phone.replace(/\s/g, '')}`}
+              class="flex items-center gap-2 text-brand-green font-bold text-lg hover:text-brand-green-dark transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+              </svg>
+              {SITE.phone}
+            </a>
+            <p class="text-xs text-gray-500 mt-1">Lunes a viernes, 9:00–19:00</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 3. How it works ───────────────────────────────────────────────── -->
+  <section class="py-16 md:py-20 bg-brand-white" aria-labelledby="process-heading">
+    <div class="container max-w-5xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 id="process-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-3">
+          Cómo vendemos tu vivienda
+        </h2>
+        <p class="text-gray-600 text-lg">Un proceso simple, claro y sin sorpresas.</p>
+      </div>
+      <ol class="grid grid-cols-1 md:grid-cols-5 gap-6 relative">
+        {steps.map((s, i) => (
+          <li class="flex flex-col gap-3 text-center md:text-left">
+            <div class="flex md:flex-col items-center md:items-start gap-3">
+              <span class="flex items-center justify-center w-10 h-10 rounded-full bg-brand-green text-white font-heading font-bold text-sm shrink-0" aria-hidden="true">
+                {s.step}
+              </span>
+              {i < steps.length - 1 && (
+                <span class="hidden md:block w-full h-px bg-gray-200 mt-5" aria-hidden="true" />
+              )}
+            </div>
+            <h3 class="font-heading font-semibold text-brand-black text-sm">{s.title}</h3>
+            <p class="text-gray-600 text-xs leading-relaxed">{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ─── 4. Testimonial ────────────────────────────────────────────────── -->
+  <TestimonialBlock
+    testimonials={testimonials.filter((t) => t.serviceType === 'sell' || t.featured)}
+    variant="single"
+  />
+
+  <!-- ─── 5. Final CTA ──────────────────────────────────────────────────── -->
+  <CTABlock
+    title="¿Listo para vender?"
+    subtitle="Contacta ahora. Primera consulta gratuita y sin compromiso."
+    ctaPrimary={{ label: 'Solicitar valoración gratuita', href: '#formulario' }}
+    ctaWhatsApp={{ label: 'Vender por WhatsApp', context: 'sell' }}
+    variant="dark"
+  />
+
+</BaseLayout>

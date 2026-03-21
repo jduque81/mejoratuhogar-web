@@ -1,0 +1,218 @@
+---
+/**
+ * index.astro — Home page (/)
+ *
+ * Sections:
+ *   1. Hero — value proposition + primary CTAs
+ *   2. Services — 4 service cards
+ *   3. Featured properties — CMS-driven, static fallback
+ *   4. Why choose us — static trust block
+ *   5. Testimonials — CMS-driven, static fallback
+ *   6. Sell CTA — green conversion block
+ *
+ * CMS data: getFeaturedProperties(), getFeaturedTestimonials()
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroSection from '../components/HeroSection.astro'
+import ServiceCard from '../components/ServiceCard.astro'
+import PropertyCard from '../components/PropertyCard.astro'
+import TestimonialBlock from '../components/TestimonialBlock.astro'
+import CTABlock from '../components/CTABlock.astro'
+import { getFeaturedProperties, getFeaturedTestimonials } from '../lib/sanity'
+import { FALLBACK_PROPERTIES, FALLBACK_TESTIMONIALS } from '../data/fallback'
+import type { PropertyCard as PropertyCardData } from '../lib/sanity'
+import type { Testimonial } from '../lib/sanity'
+
+// ─── CMS data with static fallback ───────────────────────────────────────────
+
+let featuredProperties: PropertyCardData[] = []
+try {
+  featuredProperties = await getFeaturedProperties()
+} catch {}
+if (!featuredProperties.length) {
+  featuredProperties = FALLBACK_PROPERTIES.filter((p) => p.featured).slice(0, 3)
+}
+
+let testimonials: Testimonial[] = []
+try {
+  testimonials = await getFeaturedTestimonials()
+} catch {}
+if (!testimonials.length) {
+  testimonials = FALLBACK_TESTIMONIALS
+}
+
+// ─── Static service definitions ───────────────────────────────────────────────
+
+const services = [
+  {
+    icon: '🏡',
+    title: 'Comprar vivienda',
+    description: 'Encuentra tu hogar ideal en Benicarló, Vinaròs o Peñíscola. Te acompañamos en cada paso del proceso.',
+    href: '/comprar',
+    ctaLabel: 'Ver propiedades →',
+    highlight: false,
+  },
+  {
+    icon: '💰',
+    title: 'Vender tu vivienda',
+    description: 'Valoración gratuita y venta al mejor precio. Sin comisiones ocultas. Resultados rápidos y reales.',
+    href: '/vender',
+    ctaLabel: 'Solicitar valoración →',
+    highlight: true,
+  },
+  {
+    icon: '🔑',
+    title: 'Alquiler',
+    description: 'Pisos y casas en alquiler en las mejores zonas de Castellón. Gestión completa del proceso.',
+    href: '/alquiler',
+    ctaLabel: 'Ver alquileres →',
+    highlight: false,
+  },
+  {
+    icon: '🪟',
+    title: 'Ventanas y puertas PVC',
+    description: 'Ahorra energía, mejora el aislamiento y refuerza la seguridad con nuestras ventanas y puertas PVC. Instalación incluida.',
+    href: '/ventanas-pvc',
+    ctaLabel: 'Pedir presupuesto →',
+    highlight: false,
+  },
+]
+
+// ─── Static "Why us" trust points ─────────────────────────────────────────────
+
+const whyUs = [
+  { icon: '📍', title: 'Expertos locales', text: 'Conocemos cada barrio de Castellón. Te damos el consejo que nadie más puede darte.' },
+  { icon: '⚡', title: 'Respuesta rápida', text: 'Respondemos en menos de 24h. Por WhatsApp, teléfono o formulario. Siempre disponibles.' },
+  { icon: '🤝', title: 'Sin comisiones ocultas', text: 'Transparencia total en cada operación. Sabrás exactamente qué pagas y por qué.' },
+  { icon: '🏆', title: 'Resultados probados', text: 'Decenas de familias han encontrado su hogar con nosotros. Su satisfacción nos avala.' },
+]
+---
+
+<BaseLayout
+  title="Inmobiliaria en Castellón – Compra, Vende y Alquila"
+  description="Tu inmobiliaria de confianza en Castellón. Compra, vende y alquila viviendas en Benicarló, Vinaròs y Peñíscola. Expertos en ventanas y puertas PVC. Contacta hoy."
+  whatsappContext="default"
+>
+
+  <!-- ─── 1. Hero ────────────────────────────────────────────────────────── -->
+  <HeroSection
+    title="Tu próxima vivienda en Castellón"
+    subtitle="Compra, vende y alquila propiedades en Benicarló, Vinaròs y Peñíscola. Atención local, resultados reales."
+    badge="Inmobiliaria local de confianza"
+    ctaPrimary={{ label: 'Ver propiedades', href: '/comprar' }}
+    ctaWhatsApp={{ label: 'Hablar por WhatsApp', context: 'default' }}
+    ctaSecondary={{ label: 'Valoración gratuita', href: '/vender' }}
+    backgroundImage={{
+      src: '/images/terraza-piso-benicarlo.jpg',
+      alt: 'Terraza amplia con vistas en piso en Benicarló',
+    }}
+  >
+    <!-- Trust stats below CTAs — white text on dark hero background -->
+    <div class="flex flex-wrap gap-6 mt-2 text-sm text-gray-300">
+      <span class="flex items-center gap-1.5">
+        <span class="text-brand-green font-bold text-base">✓</span> Valoración gratuita
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="text-brand-green font-bold text-base">✓</span> Atención personalizada
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="text-brand-green font-bold text-base">✓</span> Respuesta en 24h
+      </span>
+    </div>
+  </HeroSection>
+
+  <!-- ─── 2. Services grid ──────────────────────────────────────────────── -->
+  <section class="py-16 md:py-20 bg-gray-50" aria-labelledby="services-heading">
+    <div class="container max-w-6xl mx-auto">
+      <div class="text-center mb-10">
+        <h2 id="services-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-3">
+          ¿En qué podemos ayudarte?
+        </h2>
+        <p class="text-gray-600 text-lg max-w-xl mx-auto">
+          Desde la compra de tu primera vivienda hasta mejorar tu hogar con ventanas y puertas PVC.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        {services.map((s) => (
+          <ServiceCard
+            icon={s.icon}
+            title={s.title}
+            description={s.description}
+            href={s.href}
+            ctaLabel={s.ctaLabel}
+            highlight={s.highlight}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 3. Featured properties ────────────────────────────────────────── -->
+  {featuredProperties.length > 0 && (
+    <section class="py-16 md:py-20 bg-brand-white" aria-labelledby="featured-heading">
+      <div class="container max-w-6xl mx-auto">
+        <div class="flex items-end justify-between mb-10 gap-4">
+          <div>
+            <h2 id="featured-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-2">
+              Propiedades destacadas
+            </h2>
+            <p class="text-gray-600">Selección de las mejores viviendas disponibles ahora.</p>
+          </div>
+          <a href="/comprar" class="shrink-0 text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors hidden sm:block">
+            Ver todas →
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredProperties.map((property) => (
+            <PropertyCard property={property} />
+          ))}
+        </div>
+        <div class="text-center mt-8 sm:hidden">
+          <a href="/comprar" class="btn-outline">Ver todas las propiedades</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ─── 4. Why choose us ──────────────────────────────────────────────── -->
+  <section class="py-16 md:py-20 bg-gray-50" aria-labelledby="why-heading">
+    <div class="container max-w-6xl mx-auto">
+      <div class="text-center mb-10">
+        <h2 id="why-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-3">
+          Por qué elegirnos
+        </h2>
+        <p class="text-gray-600 text-lg max-w-xl mx-auto">
+          Somos tu mejor opción inmobiliaria en Castellón. Aquí te explicamos por qué.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {whyUs.map((item) => (
+          <div class="flex flex-col gap-3 p-6 bg-white rounded-2xl border border-gray-100">
+            <span class="text-3xl" aria-hidden="true">{item.icon}</span>
+            <h3 class="font-heading font-semibold text-brand-black text-base">{item.title}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 5. Testimonials ───────────────────────────────────────────────── -->
+  <TestimonialBlock
+    testimonials={testimonials}
+    variant="grid"
+    title="Lo que dicen nuestros clientes"
+    subtitle="Más de 100 familias han confiado en nosotros para comprar, vender o alquilar su vivienda."
+  />
+
+  <!-- ─── 6. Sell CTA ───────────────────────────────────────────────────── -->
+  <CTABlock
+    title="¿Quieres vender tu vivienda?"
+    subtitle="Solicita una valoración gratuita hoy. Sin compromiso, sin comisiones ocultas."
+    ctaPrimary={{ label: 'Solicitar valoración gratuita', href: '/vender' }}
+    ctaWhatsApp={{ label: 'Vender por WhatsApp', context: 'sell' }}
+    variant="green"
+  />
+
+</BaseLayout>

@@ -1,0 +1,115 @@
+---
+/**
+ * comprar.astro — Buy page (/comprar)
+ *
+ * Sections:
+ *   1. Hero — value proposition for buyers
+ *   2. Zone filter pills — SEO-friendly city links
+ *   3. Property grid — CMS-driven sale listings, static fallback
+ *   4. Empty state — when no properties are available
+ *   5. CTA block — "¿No encuentras lo que buscas?"
+ *
+ * CMS data: getPropertiesByOperationType('sale')
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroSection from '../components/HeroSection.astro'
+import PropertyCard from '../components/PropertyCard.astro'
+import CTABlock from '../components/CTABlock.astro'
+import WhatsAppButton from '../components/WhatsAppButton.astro'
+import { getPropertiesByOperationType } from '../lib/sanity'
+import { FALLBACK_PROPERTIES } from '../data/fallback'
+import type { PropertyCard as PropertyCardData } from '../lib/sanity'
+
+// ─── CMS data with static fallback ───────────────────────────────────────────
+
+let properties: PropertyCardData[] = []
+try {
+  properties = await getPropertiesByOperationType('sale')
+} catch {}
+if (!properties.length) {
+  properties = FALLBACK_PROPERTIES.filter((p) => p.operationType === 'sale')
+}
+
+// ─── Zone filter links ────────────────────────────────────────────────────────
+
+const zones = [
+  { label: 'Todas las zonas', href: '/comprar' },
+  { label: 'Benicarló', href: '/zonas/benicarlo' },
+  { label: 'Vinaròs', href: '/zonas/vinaros' },
+  { label: 'Peñíscola', href: '/zonas/peniscola' },
+]
+---
+
+<BaseLayout
+  title="Comprar Vivienda en Castellón – Pisos y Casas en Venta"
+  description="Encuentra tu vivienda ideal en Castellón. Pisos, casas y áticos en venta en Benicarló, Vinaròs y Peñíscola. Contacta con nuestros expertos hoy."
+  whatsappContext="buy"
+>
+
+  <!-- ─── 1. Hero ────────────────────────────────────────────────────────── -->
+  <HeroSection
+    title="Encuentra tu vivienda ideal en Castellón"
+    subtitle="Pisos, casas y áticos en venta. Asesoramiento local gratuito en cada paso del proceso."
+    size="medium"
+    ctaWhatsApp={{ label: 'Consultar por WhatsApp', context: 'buy' }}
+    ctaPrimary={{ label: 'Ver propiedades', href: '#propiedades' }}
+  />
+
+  <!-- ─── 2. Listings ───────────────────────────────────────────────────── -->
+  <section id="propiedades" class="py-14 md:py-20 bg-brand-white">
+    <div class="container max-w-6xl mx-auto">
+
+      <!-- Zone filter pills -->
+      <div class="flex flex-wrap gap-2 mb-8" role="navigation" aria-label="Filtrar por zona">
+        {zones.map((z) => (
+          <a
+            href={z.href}
+            class="px-4 py-2 rounded-full text-sm font-medium border transition-colors
+                   border-gray-200 text-gray-700 hover:border-brand-green hover:text-brand-green
+                   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+          >
+            {z.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Result count -->
+      <p class="text-sm text-gray-500 mb-6">
+        {properties.length} {properties.length === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+      </p>
+
+      {properties.length > 0 ? (
+        <!-- Properties grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {properties.map((property) => (
+            <PropertyCard property={property} />
+          ))}
+        </div>
+      ) : (
+        <!-- Empty state -->
+        <div class="text-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
+          <span class="text-5xl mb-4 block" aria-hidden="true">🏠</span>
+          <h2 class="font-heading font-semibold text-brand-black text-xl mb-2">
+            Pronto tendremos más propiedades
+          </h2>
+          <p class="text-gray-600 text-sm mb-6 max-w-sm mx-auto">
+            Estamos actualizando nuestro catálogo. Escríbenos y te avisamos cuando tengamos la propiedad que buscas.
+          </p>
+          <WhatsAppButton variant="button" context="buy" label="Avisar cuando haya propiedades" />
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <!-- ─── 3. CTA block ──────────────────────────────────────────────────── -->
+  <CTABlock
+    title="¿No encuentras lo que buscas?"
+    subtitle="Cuéntanos qué necesitas y te ayudamos a encontrar la vivienda perfecta. Sin coste ni compromiso."
+    ctaWhatsApp={{ label: 'Describir lo que busco', context: 'buy' }}
+    ctaPrimary={{ label: 'Ir a contacto', href: '/contacto' }}
+    variant="light"
+  />
+
+</BaseLayout>

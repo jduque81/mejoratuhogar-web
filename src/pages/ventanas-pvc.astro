@@ -1,0 +1,212 @@
+---
+/**
+ * ventanas-pvc.astro — PVC Windows page (/ventanas-pvc)
+ *
+ * High-margin service page. Lead-focused from top to bottom.
+ *
+ * Sections:
+ *   1. Hero — savings + quality message
+ *   2. Benefits grid — 6 key selling points (static)
+ *   3. CMS content block — if Sanity service data exists
+ *   4. Contact form — quote request
+ *   5. Final CTA green
+ *
+ * CMS data: getServiceByType('pvc-windows') — optional enrichment
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroSection from '../components/HeroSection.astro'
+import ContactForm from '../components/ContactForm.astro'
+import CTABlock from '../components/CTABlock.astro'
+import WhatsAppButton from '../components/WhatsAppButton.astro'
+import { getServiceByType } from '../lib/sanity'
+import type { Service } from '../lib/sanity'
+import { SITE } from '../data/site'
+
+// ─── Optional CMS content ─────────────────────────────────────────────────────
+
+let service: Service | null = null
+try {
+  service = await getServiceByType('pvc-windows')
+} catch {}
+
+// ─── Static benefit tiles ─────────────────────────────────────────────────────
+
+const benefits = [
+  {
+    icon: '⚡',
+    title: 'Ahorro energético',
+    text: 'Reduce hasta un 30% tu factura de calefacción y aire acondicionado. El PVC aísla más que el aluminio tanto en ventanas como en puertas.',
+  },
+  {
+    icon: '🔇',
+    title: 'Aislamiento acústico',
+    text: 'Disfruta de un hogar tranquilo. Nuestras ventanas y puertas PVC reducen el ruido exterior hasta en un 40 dB.',
+  },
+  {
+    icon: '🔒',
+    title: 'Mayor seguridad',
+    text: 'Cierre multipunto en ventanas y puertas. Resistencia superior frente a intentos de acceso no autorizado.',
+  },
+  {
+    icon: '🛠️',
+    title: 'Sin mantenimiento',
+    text: 'El PVC no necesita pintura, barniz ni tratamientos. Ventanas y puertas que se mantienen como nuevas con solo una limpieza periódica.',
+  },
+  {
+    icon: '🌱',
+    title: 'Ecológico y reciclable',
+    text: 'El PVC es 100% reciclable. Una elección sostenible que también beneficia al medio ambiente.',
+  },
+  {
+    icon: '💎',
+    title: 'Estética moderna',
+    text: 'Ventanas y puertas disponibles en múltiples acabados y colores. Mejoran el aspecto de tu hogar desde el primer día.',
+  },
+]
+
+// ─── Static process steps ─────────────────────────────────────────────────────
+
+const steps = [
+  { step: '01', title: 'Contacta', text: 'Llámanos o escríbenos. Te respondemos rápido.' },
+  { step: '02', title: 'Visita gratuita', text: 'Medimos y asesoramos en tu domicilio sin coste.' },
+  { step: '03', title: 'Presupuesto', text: 'Presupuesto personalizado sin sorpresas.' },
+  { step: '04', title: 'Instalación', text: 'Instalación limpia y profesional en 1–2 días.' },
+]
+---
+
+<BaseLayout
+  title="Ventanas y Puertas PVC en Castellón – Ahorro Energético y Calidad"
+  description="Ventanas y puertas PVC de alta calidad en Castellón. Ahorra hasta un 30% en energía, mejora el aislamiento y aumenta el valor de tu hogar. Presupuesto gratuito."
+  whatsappContext="pvc"
+>
+
+  <!-- ─── 1. Hero ────────────────────────────────────────────────────────── -->
+  <HeroSection
+    title={service?.title ?? 'Ventanas y puertas PVC de alta calidad en Castellón'}
+    subtitle={service?.shortDescription ?? 'Ahorra hasta un 30% en energía, mejora el confort y aumenta el valor de tu hogar. Ventanas y puertas PVC con instalación incluida. Presupuesto gratuito sin compromiso.'}
+    badge="Presupuesto gratuito"
+    ctaPrimary={{ label: 'Solicitar presupuesto', href: '#presupuesto' }}
+    ctaWhatsApp={{ label: 'Consultar por WhatsApp', context: 'pvc' }}
+  />
+
+  <!-- ─── 2. Benefits grid ──────────────────────────────────────────────── -->
+  <section class="py-16 md:py-20 bg-gray-50" aria-labelledby="benefits-heading">
+    <div class="container max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 id="benefits-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-3">
+          ¿Por qué elegir PVC para tu hogar?
+        </h2>
+        <p class="text-gray-600 text-lg max-w-xl mx-auto">
+          La inversión que más rentabilidad te da en mejoras del hogar. Válido para ventanas y puertas.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {benefits.map((b) => (
+          <div class="flex flex-col gap-3 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <span class="text-3xl" aria-hidden="true">{b.icon}</span>
+            <h3 class="font-heading font-semibold text-brand-black text-base">{b.title}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{b.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 3. CMS benefits list (if Sanity data exists) ─────────────────── -->
+  {service?.benefits && service.benefits.length > 0 && (
+    <section class="py-14 md:py-16 bg-brand-white" aria-labelledby="service-benefits-heading">
+      <div class="container max-w-4xl mx-auto">
+        <h2 id="service-benefits-heading" class="font-heading font-bold text-2xl text-brand-black mb-6 text-center">
+          Lo que incluye nuestro servicio
+        </h2>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {service.benefits.map((b) => (
+            <li class="flex items-start gap-3 text-gray-700 text-sm p-4 bg-gray-50 rounded-xl">
+              <span class="text-brand-green font-bold shrink-0" aria-hidden="true">✓</span>
+              {b}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <!-- ─── 4. Process steps ──────────────────────────────────────────────── -->
+  <section class="py-14 md:py-16 bg-gray-50" aria-labelledby="process-pvc-heading">
+    <div class="container max-w-5xl mx-auto">
+      <h2 id="process-pvc-heading" class="font-heading font-bold text-2xl text-brand-black mb-10 text-center">
+        Así de fácil es mejorar tu hogar con PVC
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {steps.map((s) => (
+          <div class="flex flex-col items-center text-center gap-3">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-brand-green text-white font-heading font-bold text-sm" aria-hidden="true">
+              {s.step}
+            </span>
+            <h3 class="font-heading font-semibold text-brand-black text-sm">{s.title}</h3>
+            <p class="text-gray-600 text-xs leading-relaxed">{s.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 5. Form + contact info ────────────────────────────────────────── -->
+  <section id="presupuesto" class="py-16 md:py-20 bg-brand-white" aria-labelledby="form-pvc-heading">
+    <div class="container max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+
+        <!-- Form -->
+        <div>
+          <h2 id="form-pvc-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-2">
+            Solicita tu presupuesto gratuito
+          </h2>
+          <p class="text-gray-600 mb-6">Ventanas, puertas o ambas. Sin compromiso. Te llamamos para concertar una visita gratuita.</p>
+          <ContactForm
+            formId="pvc-form"
+            variant="property"
+            submitLabel="Quiero mi presupuesto"
+            whatsappContext="pvc"
+          />
+        </div>
+
+        <!-- Contact info -->
+        <div class="flex flex-col gap-6">
+          <div class="p-6 bg-gray-50 rounded-2xl border border-gray-100">
+            <h3 class="font-heading font-semibold text-brand-black mb-4">¿Prefieres llamarnos?</h3>
+            <a
+              href={`tel:${SITE.phone.replace(/\s/g, '')}`}
+              class="flex items-center gap-3 text-brand-black font-bold text-lg hover:text-brand-green transition-colors mb-3"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+              </svg>
+              {SITE.phone}
+            </a>
+            <WhatsAppButton variant="inline" context="pvc" />
+          </div>
+
+          <!-- Trust note -->
+          <div class="p-5 bg-green-50 rounded-xl border border-green-100">
+            <p class="text-brand-green text-sm font-semibold mb-1">Garantía de satisfacción</p>
+            <p class="text-gray-700 text-sm leading-relaxed">
+              Todos nuestros trabajos incluyen garantía de instalación. Si algo no es perfecto, lo solucionamos.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 6. Final CTA ──────────────────────────────────────────────────── -->
+  <CTABlock
+    title="Mejora tu hogar hoy"
+    subtitle="Ventanas y puertas PVC. Presupuesto gratuito en 24h. Instalación en 1-2 días. Sin obras ni suciedad."
+    ctaPrimary={{ label: 'Solicitar presupuesto', href: '#presupuesto' }}
+    ctaWhatsApp={{ label: 'Consultar por WhatsApp', context: 'pvc' }}
+    variant="green"
+  />
+
+</BaseLayout>

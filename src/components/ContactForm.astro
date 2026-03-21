@@ -1,0 +1,210 @@
+---
+/**
+ * ContactForm.astro — Lead capture form
+ *
+ * Props:
+ *   formId       — unique ID for GA tracking + HTML id (required)
+ *   variant      — 'lead' | 'property' | 'contact'
+ *                   lead:     name + phone (2 fields — highest conversion)
+ *                   property: name + phone + message (3 fields)
+ *                   contact:  name + phone + email + message (4 fields)
+ *   title        — optional form heading
+ *   description  — optional supporting text
+ *   submitLabel  — CTA button text (default: "Enviar mensaje")
+ *   action       — form action URL (Formspree: "https://formspree.io/f/xxx")
+ *                  Defaults to "#" — replace before launch
+ *   successMsg   — text shown after submission (inline JS)
+ *
+ * Submission:
+ *   - Netlify Forms ready (data-netlify="true")
+ *   - Configurable action URL for any external handler
+ *   - GA event fired on submit via window.trackFormSubmit
+ */
+
+import WhatsAppButton from './WhatsAppButton.astro'
+import type { WhatsAppContext } from '../data/site'
+
+type FormVariant = 'lead' | 'property' | 'contact'
+
+interface Props {
+  formId: string
+  variant?: FormVariant
+  title?: string
+  description?: string
+  submitLabel?: string
+  action?: string
+  whatsappContext?: WhatsAppContext
+}
+
+const {
+  formId,
+  variant = 'lead',
+  title,
+  description,
+  submitLabel = 'Enviar mensaje',
+  // Use PUBLIC_FORM_ACTION env var if set; fall back to '#' (inline demo mode).
+  // Netlify Forms: leave PUBLIC_FORM_ACTION unset — data-netlify handles submission.
+  // Formspree: set PUBLIC_FORM_ACTION=https://formspree.io/f/your_id
+  action = import.meta.env.PUBLIC_FORM_ACTION || '#',
+  whatsappContext,
+} = Astro.props
+
+const showEmail = variant === 'contact'
+const showMessage = variant === 'property' || variant === 'contact'
+---
+
+<div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+
+  {/* Optional heading */}
+  {title && (
+    <h3 class="font-heading font-bold text-brand-black text-xl mb-2">
+      {title}
+    </h3>
+  )}
+  {description && (
+    <p class="text-gray-600 text-sm mb-6 leading-relaxed">{description}</p>
+  )}
+
+  {/* Form */}
+  <form
+    id={formId}
+    method="POST"
+    action={action}
+    data-netlify="true"
+    name={formId}
+    class="flex flex-col gap-4"
+    novalidate
+  >
+    {/* Netlify hidden field */}
+    <input type="hidden" name="form-name" value={formId} />
+
+    {/* ─── Name ───────────────────────────────────────────────────────── */}
+    <div class="flex flex-col gap-1.5">
+      <label for={`${formId}-name`} class="text-sm font-medium text-gray-700">
+        Nombre <span class="text-red-500" aria-hidden="true">*</span>
+      </label>
+      <input
+        id={`${formId}-name`}
+        type="text"
+        name="name"
+        required
+        autocomplete="name"
+        placeholder="Tu nombre"
+        class="w-full px-4 py-3 rounded-lg border border-gray-300 text-brand-black text-sm
+               placeholder:text-gray-400
+               focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent
+               transition-colors"
+      />
+    </div>
+
+    {/* ─── Phone ──────────────────────────────────────────────────────── */}
+    <div class="flex flex-col gap-1.5">
+      <label for={`${formId}-phone`} class="text-sm font-medium text-gray-700">
+        Teléfono <span class="text-red-500" aria-hidden="true">*</span>
+      </label>
+      <input
+        id={`${formId}-phone`}
+        type="tel"
+        name="phone"
+        required
+        autocomplete="tel"
+        placeholder="+34 600 000 000"
+        class="w-full px-4 py-3 rounded-lg border border-gray-300 text-brand-black text-sm
+               placeholder:text-gray-400
+               focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent
+               transition-colors"
+      />
+    </div>
+
+    {/* ─── Email (contact variant only) ───────────────────────────────── */}
+    {showEmail && (
+      <div class="flex flex-col gap-1.5">
+        <label for={`${formId}-email`} class="text-sm font-medium text-gray-700">
+          Email
+        </label>
+        <input
+          id={`${formId}-email`}
+          type="email"
+          name="email"
+          autocomplete="email"
+          placeholder="tu@email.com"
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 text-brand-black text-sm
+                 placeholder:text-gray-400
+                 focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent
+                 transition-colors"
+        />
+      </div>
+    )}
+
+    {/* ─── Message (property + contact variants) ──────────────────────── */}
+    {showMessage && (
+      <div class="flex flex-col gap-1.5">
+        <label for={`${formId}-message`} class="text-sm font-medium text-gray-700">
+          Mensaje
+        </label>
+        <textarea
+          id={`${formId}-message`}
+          name="message"
+          rows={3}
+          placeholder="¿En qué podemos ayudarte?"
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 text-brand-black text-sm
+                 placeholder:text-gray-400 resize-none
+                 focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent
+                 transition-colors"
+        ></textarea>
+      </div>
+    )}
+
+    {/* Privacy note */}
+    <p class="text-xs text-gray-400 leading-relaxed">
+      Al enviar este formulario aceptas nuestra{' '}
+      <a href="/privacidad" class="underline hover:text-gray-600">política de privacidad</a>.
+      Tus datos no serán compartidos con terceros.
+    </p>
+
+    {/* Submit button */}
+    <button type="submit" class="btn-primary w-full justify-center">
+      {submitLabel}
+    </button>
+
+    {/* Success message (hidden until JS reveals it) */}
+    <div
+      id={`${formId}-success`}
+      class="hidden text-center py-3 px-4 bg-green-50 border border-green-200 rounded-lg text-brand-green text-sm font-medium"
+      role="status"
+      aria-live="polite"
+    >
+      ✓ Mensaje enviado. Te contactamos en breve.
+    </div>
+
+  </form>
+
+  {/* WhatsApp fallback */}
+  {whatsappContext && (
+    <div class="mt-5 pt-5 border-t border-gray-100 text-center">
+      <p class="text-xs text-gray-500 mb-2">¿Prefieres una respuesta inmediata?</p>
+      <WhatsAppButton variant="inline" context={whatsappContext} />
+    </div>
+  )}
+
+</div>
+
+<script define:vars={{ formId }}>
+  const form = document.getElementById(formId)
+  const successBox = document.getElementById(`${formId}-success`)
+
+  form?.addEventListener('submit', (e) => {
+    // Fire GA tracking
+    if (typeof window.trackFormSubmit === 'function') {
+      window.trackFormSubmit(formId)
+    }
+
+    // If no real action is set (still '#'), show inline success and prevent submission
+    if (form.getAttribute('action') === '#') {
+      e.preventDefault()
+      successBox?.classList.remove('hidden')
+      form.reset()
+    }
+    // Otherwise, let the form POST to Netlify / Formspree normally
+  })
+</script>

@@ -1,0 +1,180 @@
+---
+/**
+ * HeroSection.astro — Page hero block
+ *
+ * Props:
+ *   title           — main heading (required)
+ *   subtitle        — supporting paragraph
+ *   badge           — small label above the title (urgency / trust signal)
+ *   ctaPrimary      — { label, href } — main action button (green)
+ *   ctaWhatsApp     — { label, context } — WhatsApp button
+ *   ctaSecondary    — { label, href } — optional third CTA (outlined)
+ *   image           — { src, alt } — optional right-side image (light mode only)
+ *   backgroundImage — { src, alt } — full-bleed background image (dark mode)
+ *   centered        — center-align text (default: false, left-aligned)
+ *   size            — 'large' | 'medium' (controls vertical padding)
+ *
+ * Modes:
+ *   Default (no backgroundImage): white background, dark text, optional right image
+ *   Background image mode:        image fills section, dark overlay, white text
+ */
+
+import WhatsAppButton from './WhatsAppButton.astro'
+import type { WhatsAppContext } from '../data/site'
+
+interface CTALink {
+  label: string
+  href: string
+}
+
+interface CTAWhatsApp {
+  label?: string
+  context: WhatsAppContext
+}
+
+interface HeroImage {
+  src: string
+  alt: string
+}
+
+interface Props {
+  title: string
+  subtitle?: string
+  badge?: string
+  ctaPrimary?: CTALink
+  ctaWhatsApp?: CTAWhatsApp
+  ctaSecondary?: CTALink
+  image?: HeroImage
+  backgroundImage?: HeroImage
+  centered?: boolean
+  size?: 'large' | 'medium'
+}
+
+const {
+  title,
+  subtitle,
+  badge,
+  ctaPrimary,
+  ctaWhatsApp,
+  ctaSecondary,
+  image,
+  backgroundImage,
+  centered = false,
+  size = 'large',
+} = Astro.props
+
+const hasBgImage = !!backgroundImage
+
+// Padding — background-image mode uses min-height instead of loose padding
+const paddingClass = hasBgImage
+  ? (size === 'large' ? 'py-20 md:py-28 lg:py-36' : 'py-14 md:py-20')
+  : (size === 'large' ? 'py-16 md:py-24 lg:py-32' : 'py-12 md:py-16')
+
+// Text colours switch based on mode
+const headingColor  = hasBgImage ? 'text-white'      : 'text-brand-black'
+const subtitleColor = hasBgImage ? 'text-gray-200'   : 'text-gray-600'
+const badgeClass    = hasBgImage
+  ? 'bg-white/10 text-white border-white/30'
+  : 'bg-green-50 text-brand-green border-green-200'
+
+const alignClass = centered ? 'text-center items-center' : 'text-left items-start'
+
+// Right-side image grid is only available in light mode (no background image)
+const gridClass = (!hasBgImage && image)
+  ? 'grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center'
+  : ''
+---
+
+<section
+  class={`${hasBgImage ? 'relative overflow-hidden' : 'bg-brand-white'} ${paddingClass}`}
+>
+
+  <!-- ─── Background image + overlay (only in bg-image mode) ──────────────── -->
+  {hasBgImage && (
+    <>
+      <img
+        src={backgroundImage!.src}
+        alt=""
+        aria-hidden="true"
+        class="absolute inset-0 w-full h-full object-cover object-center"
+        loading="eager"
+        decoding="async"
+        width="1920"
+        height="1080"
+      />
+      <!-- Gradient overlay: darker at bottom so text above stays readable -->
+      <div class="absolute inset-0 bg-gradient-to-b from-brand-black/55 via-brand-black/50 to-brand-black/65" aria-hidden="true" />
+    </>
+  )}
+
+  <!-- ─── Content (positioned above overlay in bg-image mode) ─────────────── -->
+  <div class={`container max-w-6xl mx-auto relative z-10 ${gridClass}`}>
+
+    <!-- ─── Text block ───────────────────────────────────────────────────── -->
+    <div class={`flex flex-col gap-6 ${alignClass}`}>
+
+      {badge && (
+        <span class={`inline-flex w-fit items-center px-3 py-1 rounded-full text-sm font-semibold border ${badgeClass}`}>
+          {badge}
+        </span>
+      )}
+
+      <h1 class={`font-heading font-bold ${headingColor} text-3xl sm:text-4xl md:text-5xl lg:text-5xl leading-tight`}>
+        {title}
+      </h1>
+
+      {subtitle && (
+        <p class={`${subtitleColor} text-lg md:text-xl leading-relaxed max-w-xl`}>
+          {subtitle}
+        </p>
+      )}
+
+      <!-- ─── CTA row ──────────────────────────────────────────────────── -->
+      {(ctaPrimary || ctaWhatsApp || ctaSecondary) && (
+        <div class={`flex flex-wrap gap-3 ${centered ? 'justify-center' : ''}`}>
+
+          {ctaPrimary && (
+            <a href={ctaPrimary.href} class="btn-primary">
+              {ctaPrimary.label}
+            </a>
+          )}
+
+          {ctaWhatsApp && (
+            <WhatsAppButton
+              variant="button"
+              context={ctaWhatsApp.context}
+              label={ctaWhatsApp.label}
+            />
+          )}
+
+          {ctaSecondary && (
+            <a href={ctaSecondary.href} class={`btn-outline ${hasBgImage ? 'border-white/50 text-white hover:bg-white/10' : ''}`}>
+              {ctaSecondary.label}
+            </a>
+          )}
+
+        </div>
+      )}
+
+      <!-- ─── Optional slot for trust indicators, stats, etc. ─────────── -->
+      <slot />
+
+    </div>
+
+    <!-- ─── Optional right-side image (light mode only) ──────────────────── -->
+    {!hasBgImage && image && (
+      <div class="relative rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-auto lg:h-[420px]">
+        <img
+          src={image.src}
+          alt={image.alt}
+          class="w-full h-full object-cover"
+          loading="eager"
+          decoding="async"
+          width="800"
+          height="560"
+        />
+      </div>
+    )}
+
+  </div>
+</section>

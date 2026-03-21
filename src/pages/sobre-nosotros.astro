@@ -1,0 +1,207 @@
+---
+/**
+ * sobre-nosotros.astro — About page (/sobre-nosotros)
+ *
+ * Fully static. No CMS data needed.
+ * Trust and brand page — builds credibility and humanises the business.
+ *
+ * Sections:
+ *   1. Page header — mission statement
+ *   2. Our story — 2-column text + stat highlight
+ *   3. Values grid — 4 core values
+ *   4. Stats row — social proof numbers
+ *   5. Why local matters — differentiator block
+ *   6. Final CTA — contact / WhatsApp
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import CTABlock from '../components/CTABlock.astro'
+import { SITE } from '../data/site'
+
+const values = [
+  {
+    icon: '🤝',
+    title: 'Honestidad ante todo',
+    text: 'Te damos valoraciones reales, no las que quieres escuchar. Construimos relaciones a largo plazo basadas en la confianza.',
+  },
+  {
+    icon: '📍',
+    title: 'Conocimiento local',
+    text: 'Llevamos años en la zona norte de Castellón. Conocemos cada barrio, cada calle y cada precio de mercado.',
+  },
+  {
+    icon: '⚡',
+    title: 'Respuesta rápida',
+    text: 'Respondemos en menos de 24 horas. Siempre. Porque sabemos que tu tiempo y tu decisión no pueden esperar.',
+  },
+  {
+    icon: '🎯',
+    title: 'Resultados, no promesas',
+    text: 'Vendemos en un promedio de 30 días. No te contamos historias: te mostramos resultados reales de clientes reales.',
+  },
+]
+
+const stats = [
+  { value: '100+', label: 'Propiedades gestionadas' },
+  { value: '30 días', label: 'Tiempo medio de venta' },
+  { value: '98%', label: 'Clientes satisfechos' },
+  { value: '10+', label: 'Años de experiencia local' },
+]
+
+const services = [
+  { icon: '🏠', label: 'Compraventa de viviendas' },
+  { icon: '🔑', label: 'Gestión de alquileres' },
+  { icon: '🪟', label: 'Instalación de ventanas PVC' },
+  { icon: '📊', label: 'Valoraciones gratuitas' },
+  { icon: '📋', label: 'Asesoramiento legal' },
+  { icon: '📸', label: 'Fotografía profesional' },
+]
+---
+
+<BaseLayout
+  title="Quiénes Somos – Inmobiliaria Local en Benicarló y Castellón"
+  description="Conoce a Mejora Tu Hogar, tu inmobiliaria de confianza en Benicarló, Vinaròs y Peñíscola. Compraventa, alquiler y mejoras del hogar con atención local y personal."
+  whatsappContext="contact"
+>
+
+  <!-- ─── 1. Page header ──────────────────────────────────────────────── -->
+  <section class="py-14 md:py-20 bg-gray-50 border-b border-gray-100">
+    <div class="container max-w-4xl mx-auto text-center">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-green-100 text-brand-green text-sm font-semibold mb-4">
+        Tu inmobiliaria de confianza en Castellón
+      </span>
+      <h1 class="font-heading font-bold text-3xl md:text-4xl lg:text-5xl text-brand-black mb-4 leading-tight">
+        Personas reales.<br class="hidden sm:block" /> Resultados reales.
+      </h1>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
+        Somos un equipo local especializado en compraventa, alquiler y mejora del hogar en la zona norte de Castellón. Sin grandes corporaciones. Sin letra pequeña. Solo trabajo bien hecho.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── 2. Our story ───────────────────────────────────────────────── -->
+  <section class="py-16 md:py-20 bg-brand-white" aria-labelledby="story-heading">
+    <div class="container max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+        <!-- Text -->
+        <div class="flex flex-col gap-5">
+          <h2 id="story-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black">
+            Nacimos aquí. Trabajamos aquí.
+          </h2>
+          <p class="text-gray-700 leading-relaxed">
+            Mejora Tu Hogar nació con una idea simple: que vender, comprar o mejorar tu vivienda en Benicarló y la Costa del Azahar debería ser un proceso claro, honesto y sin complicaciones.
+          </p>
+          <p class="text-gray-700 leading-relaxed">
+            Somos un equipo pequeño y comprometido, con más de 10 años de experiencia en la zona. No somos una franquicia ni una gran agencia nacional. Somos tus vecinos, y eso hace toda la diferencia.
+          </p>
+          <p class="text-gray-700 leading-relaxed">
+            Desde una primera consulta gratuita hasta la firma ante notario, estamos contigo en cada paso. Sin sorpresas. Sin costes ocultos.
+          </p>
+          <!-- Phone CTA -->
+          <a
+            href={`tel:${SITE.phone.replace(/\s/g, '')}`}
+            class="inline-flex items-center gap-2 text-brand-green font-semibold hover:text-brand-green-dark transition-colors mt-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+            </svg>
+            Llámanos: {SITE.phone}
+          </a>
+        </div>
+
+        <!-- Highlight card -->
+        <div class="flex flex-col gap-6">
+          <div class="p-8 bg-brand-green rounded-2xl text-white">
+            <p class="font-heading font-bold text-5xl mb-2">10+</p>
+            <p class="text-green-100 font-medium text-lg">Años ayudando a familias en Castellón</p>
+            <p class="text-green-100 text-sm mt-3 leading-relaxed">
+              Desde Benicarló hasta Peñíscola. Conocemos cada barrio, cada bloque y cada precio de mercado.
+            </p>
+          </div>
+          <!-- Services mini grid -->
+          <div class="grid grid-cols-2 gap-3">
+            {services.map((s) => (
+              <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                <span class="text-xl" aria-hidden="true">{s.icon}</span>
+                <span class="text-sm font-medium text-gray-700">{s.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 3. Stats row ───────────────────────────────────────────────── -->
+  <section class="py-12 bg-gray-50 border-t border-b border-gray-100" aria-label="Cifras clave">
+    <div class="container max-w-5xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        {stats.map((s) => (
+          <div class="flex flex-col gap-1">
+            <span class="font-heading font-bold text-brand-green text-3xl md:text-4xl">{s.value}</span>
+            <span class="text-sm text-gray-500">{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 4. Values grid ─────────────────────────────────────────────── -->
+  <section class="py-16 md:py-20 bg-brand-white" aria-labelledby="values-heading">
+    <div class="container max-w-5xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 id="values-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-3">
+          Lo que nos define
+        </h2>
+        <p class="text-gray-600 text-lg max-w-xl mx-auto">
+          Cuatro principios que guían cada decisión que tomamos.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {values.map((v) => (
+          <div class="flex flex-col gap-3 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+            <span class="text-3xl" aria-hidden="true">{v.icon}</span>
+            <h3 class="font-heading font-semibold text-brand-black text-base">{v.title}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{v.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 5. Why local matters ───────────────────────────────────────── -->
+  <section class="py-14 md:py-16 bg-gray-50" aria-labelledby="local-heading">
+    <div class="container max-w-4xl mx-auto text-center">
+      <h2 id="local-heading" class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-4">
+        ¿Por qué elegir una inmobiliaria local?
+      </h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+        Las grandes agencias nacionales no conocen el precio real del piso de tu calle. Nosotros sí. Sabemos qué se vende en Benicarló, qué buscan los compradores en Peñíscola y cómo negociar en Vinaròs.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {[
+          { title: 'Conocemos el mercado', text: 'Datos reales y actualizados de la zona norte de Castellón, no estadísticas provinciales.' },
+          { title: 'Red de contactos local', text: 'Compradores y vendedores activos en nuestra base de datos. Conexiones que agilizan tu operación.' },
+          { title: 'Atención cercana', text: 'Trato personal, respuesta inmediata. No eres un número en un sistema.' },
+        ].map((item) => (
+          <div class="flex flex-col gap-3 p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+            <h3 class="font-heading font-semibold text-brand-black text-sm">{item.title}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 6. Final CTA ───────────────────────────────────────────────── -->
+  <CTABlock
+    title="¿Hablamos?"
+    subtitle="Primera consulta gratuita. Sin compromiso. Cuéntanos qué necesitas y buscamos la mejor solución para ti."
+    ctaPrimary={{ label: 'Ir a contacto', href: '/contacto' }}
+    ctaWhatsApp={{ label: 'Escribir por WhatsApp', context: 'contact' }}
+    variant="green"
+  />
+
+</BaseLayout>

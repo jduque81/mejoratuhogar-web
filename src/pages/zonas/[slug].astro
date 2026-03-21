@@ -1,0 +1,171 @@
+---
+/**
+ * zonas/[slug].astro — Zone / city page (/zonas/[slug])
+ *
+ * One page per city. Shows all available properties for that city.
+ * Important for local SEO ("pisos en Benicarló", etc.)
+ *
+ * Sections:
+ *   1. Hero — city-specific heading
+ *   2. Sale listings (if any)
+ *   3. Rent listings (if any)
+ *   4. Empty state — if no properties in either category
+ *   5. CTABlock
+ *
+ * CMS data: getAllCities() (getStaticPaths), getCityBySlug(), getPropertiesByCity()
+ * Fallback: FALLBACK_CITIES slugs + FALLBACK_PROPERTIES filtered by city slug
+ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import HeroSection from '../../components/HeroSection.astro'
+import PropertyCard from '../../components/PropertyCard.astro'
+import CTABlock from '../../components/CTABlock.astro'
+import { getAllCities, getCityBySlug, getPropertiesByCity } from '../../lib/sanity'
+import type { City, PropertyCard as PropertyCardData } from '../../lib/sanity'
+import { FALLBACK_CITIES, FALLBACK_PROPERTIES } from '../../data/fallback'
+
+// ─── getStaticPaths ───────────────────────────────────────────────────────────
+
+export async function getStaticPaths() {
+  try {
+    const cities = await getAllCities()
+    if (cities.length > 0) {
+      return cities.map((c) => ({ params: { slug: c.slug.current } }))
+    }
+  } catch {}
+  // Fallback: 3 known cities so the build never fails
+  return FALLBACK_CITIES.map((c) => ({ params: { slug: c.slug.current } }))
+}
+
+// ─── Page data ────────────────────────────────────────────────────────────────
+
+const { slug } = Astro.params as { slug: string }
+
+let cityMeta: City | null = null
+let cityName = slug
+let properties: PropertyCardData[] = []
+
+try {
+  cityMeta = await getCityBySlug(slug)
+  if (cityMeta) {
+    cityName = cityMeta.name
+    properties = await getPropertiesByCity(cityMeta._id)
+  }
+} catch {}
+
+// Fallback
+if (!cityMeta) {
+  const fallback = FALLBACK_CITIES.find((c) => c.slug.current === slug)
+  if (!fallback) return Astro.redirect('/comprar')
+  cityName = fallback.name
+}
+if (!properties.length) {
+  properties = FALLBACK_PROPERTIES.filter((p) => p.city.slug.current === slug)
+}
+
+// Split by operation type for separate sections
+const saleProperties = properties.filter((p) => p.operationType === 'sale')
+const rentProperties = properties.filter((p) => p.operationType === 'rent')
+
+// ─── SEO ──────────────────────────────────────────────────────────────────────
+
+const seoTitle = cityMeta?.seoTitle ?? `Viviendas en ${cityName} – Compra y Alquiler`
+const seoDescription =
+  cityMeta?.seoDescription ??
+  `Propiedades en venta y alquiler en ${cityName}. ${properties.length} viviendas disponibles. Asesoramiento local gratuito.`
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  whatsappContext="default"
+>
+
+  <!-- ─── 1. Hero ────────────────────────────────────────────────────────── -->
+  <HeroSection
+    title={cityMeta?.heroTitle ?? `Viviendas en ${cityName}`}
+    subtitle={cityMeta?.shortDescription ?? `Compra, vende o alquila en ${cityName}. Asesoramiento local, respuesta rápida y sin comisiones ocultas.`}
+    size="medium"
+    ctaPrimary={{ label: 'Ver propiedades', href: '#propiedades' }}
+    ctaWhatsApp={{ label: 'Consultar por WhatsApp', context: 'default' }}
+  />
+
+  <!-- ─── 2. Properties ──────────────────────────────────────────────────── -->
+  <section id="propiedades" class="py-14 md:py-20 bg-brand-white">
+    <div class="container max-w-6xl mx-auto">
+
+      {properties.length > 0 ? (
+        <div class="flex flex-col gap-14">
+
+          {/* Sale listings */}
+          {saleProperties.length > 0 && (
+            <div>
+              <div class="flex items-end justify-between mb-6 gap-4">
+                <div>
+                  <h2 class="font-heading font-bold text-2xl text-brand-black mb-1">
+                    En venta en {cityName}
+                  </h2>
+                  <p class="text-sm text-gray-500">
+                    {saleProperties.length} {saleProperties.length === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+                  </p>
+                </div>
+                <a href="/comprar" class="shrink-0 text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors hidden sm:block">
+                  Ver todas →
+                </a>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {saleProperties.map((p) => <PropertyCard property={p} />)}
+              </div>
+            </div>
+          )}
+
+          {/* Rent listings */}
+          {rentProperties.length > 0 && (
+            <div>
+              <div class="flex items-end justify-between mb-6 gap-4">
+                <div>
+                  <h2 class="font-heading font-bold text-2xl text-brand-black mb-1">
+                    En alquiler en {cityName}
+                  </h2>
+                  <p class="text-sm text-gray-500">
+                    {rentProperties.length} {rentProperties.length === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+                  </p>
+                </div>
+                <a href="/alquiler" class="shrink-0 text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors hidden sm:block">
+                  Ver todas →
+                </a>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {rentProperties.map((p) => <PropertyCard property={p} />)}
+              </div>
+            </div>
+          )}
+
+        </div>
+      ) : (
+        /* Empty state */
+        <div class="text-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
+          <span class="text-5xl mb-4 block" aria-hidden="true">🏠</span>
+          <h2 class="font-heading font-semibold text-brand-black text-xl mb-2">
+            Pronto tendremos propiedades en {cityName}
+          </h2>
+          <p class="text-gray-600 text-sm mb-6 max-w-sm mx-auto">
+            Estamos actualizando el catálogo para esta zona. Escríbenos y te avisamos cuando tengamos lo que buscas.
+          </p>
+          <a href="/contacto" class="btn-primary">Avisar cuando haya disponibilidad</a>
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <!-- ─── 3. CTABlock ────────────────────────────────────────────────────── -->
+  <CTABlock
+    title={`¿Buscas algo específico en ${cityName}?`}
+    subtitle="Cuéntanos qué necesitas y buscamos la propiedad que se adapta a ti. Sin coste ni compromiso."
+    ctaWhatsApp={{ label: 'Escribir por WhatsApp', context: 'default' }}
+    ctaPrimary={{ label: 'Ir a contacto', href: '/contacto' }}
+    variant="light"
+  />
+
+</BaseLayout>

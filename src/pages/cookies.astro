@@ -1,0 +1,161 @@
+---
+/**
+ * cookies.astro — Cookie policy (/cookies)
+ *
+ * Required by Ley 34/2002 (LSSI-CE) Art. 22.2 and Directiva 2009/136/CE.
+ *
+ * Fully static. No CMS data needed.
+ * Note: cookie consent banner is pending implementation (post-MVP).
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { SITE } from '../data/site'
+
+const lastUpdated = '2025-01-01'
+---
+
+<BaseLayout
+  title="Política de Cookies"
+  description="Información sobre las cookies utilizadas en mejoratuhogar.es y cómo gestionarlas."
+  noindex={false}
+  whatsappContext="contact"
+>
+
+  <div class="bg-gray-50 border-b border-gray-100 py-8 md:py-10">
+    <div class="container max-w-3xl mx-auto">
+      <h1 class="font-heading font-bold text-2xl md:text-3xl text-brand-black mb-1">Política de Cookies</h1>
+      <p class="text-sm text-gray-500">Última actualización: {lastUpdated}</p>
+    </div>
+  </div>
+
+  <article class="container max-w-3xl mx-auto py-12 md:py-16 flex flex-col gap-10 text-gray-700 leading-relaxed">
+
+    <!-- ─── 1. Qué son las cookies ────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">1. ¿Qué son las cookies?</h2>
+      <p>
+        Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo (ordenador, tablet o
+        móvil) cuando visitas un sitio web. Permiten que el sitio web recuerde tus preferencias y acciones
+        durante un período de tiempo.
+      </p>
+    </section>
+
+    <!-- ─── 2. Cookies que usamos ─────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">2. Cookies utilizadas en este sitio web</h2>
+      <p>Este sitio web utiliza las siguientes cookies:</p>
+
+      <!-- Técnicas / sesión -->
+      <div>
+        <h3 class="font-heading font-semibold text-brand-black text-base mb-3">Cookies técnicas (sesión)</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse border border-gray-200 rounded-lg overflow-hidden">
+            <thead>
+              <tr class="bg-gray-100 text-left">
+                <th class="p-3 font-semibold text-brand-black border-b border-gray-200">Cookie</th>
+                <th class="p-3 font-semibold text-brand-black border-b border-gray-200">Finalidad</th>
+                <th class="p-3 font-semibold text-brand-black border-b border-gray-200">Duración</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-100">
+                <td class="p-3 font-mono text-xs">session</td>
+                <td class="p-3">Gestión de la sesión del usuario durante la navegación.</td>
+                <td class="p-3">Sesión</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Analíticas -->
+      <div>
+        <h3 class="font-heading font-semibold text-brand-black text-base mb-3">Cookies analíticas (Google Analytics 4)</h3>
+        <p class="text-sm mb-3">
+          Utilizamos Google Analytics 4 para obtener información estadística sobre el uso del sitio web
+          (páginas visitadas, tiempo de permanencia, origen del tráfico, etc.). Esta información se utiliza
+          para mejorar el sitio y los servicios ofrecidos.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse border border-gray-200 rounded-lg overflow-hidden">
+            <thead>
+              <tr class="bg-gray-100 text-left">
+                <th class="p-3 font-semibold text-brand-black border-b border-gray-200">Cookie</th>
+                <th class="p-3 font-semibold text-brand-black border-b border-gray-200">Finalidad</th>
+                <th class="p-3 font-semibold text-brand-black border-b border-gray-200">Duración</th>
+                <th class="p-3 font-semibold text-brand-black border-b border-gray-200">Titular</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['_ga', 'Distingue usuarios únicos. Genera un ID aleatorio.', '2 años', 'Google LLC'],
+                ['_ga_*', 'Mantiene el estado de la sesión de Google Analytics.', '2 años', 'Google LLC'],
+                ['_gid', 'Distingue usuarios. Se renueva cada 24 horas.', '24 horas', 'Google LLC'],
+              ].map(([name, purpose, duration, owner]) => (
+                <tr class="border-b border-gray-100">
+                  <td class="p-3 font-mono text-xs">{name}</td>
+                  <td class="p-3">{purpose}</td>
+                  <td class="p-3 whitespace-nowrap">{duration}</td>
+                  <td class="p-3">{owner}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          Google LLC puede transferir datos a servidores en EE.UU. bajo las Cláusulas Contractuales Tipo aprobadas por la Comisión Europea.
+          Más información: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-green hover:underline">policies.google.com/privacy</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ─── 3. Cómo gestionar las cookies ────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">3. Cómo gestionar o desactivar las cookies</h2>
+      <p>
+        Puedes permitir, bloquear o eliminar las cookies instaladas en tu dispositivo desde la configuración
+        de tu navegador. A continuación encontrarás instrucciones para los navegadores más habituales:
+      </p>
+      <ul class="flex flex-col gap-2 text-sm">
+        {[
+          ['Google Chrome', 'https://support.google.com/chrome/answer/95647'],
+          ['Mozilla Firefox', 'https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies'],
+          ['Safari (Mac)', 'https://support.apple.com/es-es/guide/safari/sfri11471/mac'],
+          ['Safari (iOS)', 'https://support.apple.com/es-es/HT201265'],
+          ['Microsoft Edge', 'https://support.microsoft.com/es-es/microsoft-edge/eliminar-las-cookies-en-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09'],
+        ].map(([browser, url]) => (
+          <li class="flex items-center gap-2">
+            <span class="text-brand-green font-bold text-xs" aria-hidden="true">→</span>
+            <a href={url} target="_blank" rel="noopener noreferrer" class="text-brand-green hover:underline">
+              {browser}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="text-sm p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800">
+        <strong>Ten en cuenta</strong> que deshabilitar las cookies analíticas puede afectar a la calidad
+        de tu experiencia de navegación, aunque no impide el acceso a los contenidos del sitio web.
+      </p>
+    </section>
+
+    <!-- ─── 4. Más información ────────────────────────────────────────── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="font-heading font-bold text-xl text-brand-black">4. Más información</h2>
+      <p>
+        Para más información sobre el tratamiento de tus datos, consulta nuestra{' '}
+        <a href="/privacidad" class="text-brand-green hover:underline">Política de Privacidad</a>.
+        Para consultas específicas sobre el uso de cookies, escríbenos a{' '}
+        <a href={`mailto:${SITE.email}`} class="text-brand-green hover:underline">{SITE.email}</a>.
+      </p>
+    </section>
+
+    <!-- ─── Back link ──────────────────────────────────────────────────── -->
+    <div class="pt-4 border-t border-gray-100 flex gap-6 text-sm">
+      <a href="/" class="text-brand-green hover:underline">← Volver al inicio</a>
+      <a href="/aviso-legal" class="text-gray-500 hover:text-brand-black">Aviso legal</a>
+      <a href="/privacidad" class="text-gray-500 hover:text-brand-black">Política de privacidad</a>
+    </div>
+
+  </article>
+
+</BaseLayout>

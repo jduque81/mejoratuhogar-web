@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" fill="none">
+  <rect width="600" height="400" fill="#F3F4F6"/>
+  <!-- House outline -->
+  <g transform="translate(255, 140)">
+    <path d="M45 90V55H15L45 10L75 55H60V90H45Z" fill="none" stroke="#D1D5DB" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="30" y="65" width="18" height="25" rx="2" fill="#D1D5DB"/>
+  </g>
+  <text x="300" y="265" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#9CA3AF">Sin imagen disponible</text>
+</svg>

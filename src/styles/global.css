@@ -1,0 +1,113 @@
+/* ─── Tailwind layers ─────────────────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base reset & global defaults ───────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Smooth scroll for anchor links */
+    scroll-behavior: smooth;
+    /* Prevent font size inflation on mobile */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-brand-white text-brand-black font-sans;
+    /* Improve font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings default to Poppins */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold leading-tight;
+  }
+
+  /* Selection highlight uses brand green */
+  ::selection {
+    @apply bg-brand-green text-white;
+  }
+
+  /* Focus ring — accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-green;
+  }
+
+  /* Remove default list styles when inside nav */
+  nav ul,
+  nav ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Images are block by default */
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Anchor base */
+  a {
+    @apply text-inherit;
+    text-decoration: none;
+  }
+}
+
+/* ─── Component classes ───────────────────────────────────────────────────── */
+@layer components {
+  /* Primary action button — green, used for main CTAs */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           px-6 py-3 rounded-lg
+           bg-brand-green text-white
+           font-sans font-semibold text-base
+           transition-colors duration-200
+           hover:bg-brand-green-dark
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green;
+  }
+
+  /* Secondary button — black, used for supplementary CTAs */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           px-6 py-3 rounded-lg
+           bg-brand-black text-white
+           font-sans font-semibold text-base
+           transition-opacity duration-200
+           hover:opacity-80
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-black;
+  }
+
+  /* Outlined button — transparent with border */
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2
+           px-6 py-3 rounded-lg
+           border-2 border-brand-black text-brand-black bg-transparent
+           font-sans font-semibold text-base
+           transition-colors duration-200
+           hover:bg-brand-black hover:text-white
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-black;
+  }
+
+  /* WhatsApp-branded button — #25D366 green */
+  .btn-whatsapp {
+    @apply inline-flex items-center justify-center gap-2
+           px-6 py-3 rounded-lg
+           text-white font-sans font-semibold text-base
+           transition-colors duration-200
+           focus-visible:outline-2 focus-visible:outline-offset-2;
+    background-color: #25D366;
+  }
+  .btn-whatsapp:hover {
+    background-color: #1da851;
+  }
+}

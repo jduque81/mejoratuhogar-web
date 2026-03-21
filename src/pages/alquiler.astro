@@ -1,0 +1,126 @@
+---
+/**
+ * alquiler.astro — Rent page (/alquiler)
+ *
+ * Same structure as /comprar, filtered to rental listings.
+ *
+ * Sections:
+ *   1. Hero — value proposition for renters
+ *   2. Zone filter pills
+ *   3. Property grid — CMS-driven rental listings, static fallback
+ *   4. Empty state
+ *   5. CTA block
+ *
+ * CMS data: getPropertiesByOperationType('rent')
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroSection from '../components/HeroSection.astro'
+import PropertyCard from '../components/PropertyCard.astro'
+import CTABlock from '../components/CTABlock.astro'
+import { getPropertiesByOperationType } from '../lib/sanity'
+import { FALLBACK_PROPERTIES } from '../data/fallback'
+import type { PropertyCard as PropertyCardData } from '../lib/sanity'
+
+// ─── CMS data with static fallback ───────────────────────────────────────────
+
+let properties: PropertyCardData[] = []
+try {
+  properties = await getPropertiesByOperationType('rent')
+} catch {}
+if (!properties.length) {
+  properties = FALLBACK_PROPERTIES.filter((p) => p.operationType === 'rent')
+}
+
+// ─── Zone filter links ────────────────────────────────────────────────────────
+
+const zones = [
+  { label: 'Todas las zonas', href: '/alquiler' },
+  { label: 'Benicarló', href: '/zonas/benicarlo' },
+  { label: 'Vinaròs', href: '/zonas/vinaros' },
+  { label: 'Peñíscola', href: '/zonas/peniscola' },
+]
+---
+
+<BaseLayout
+  title="Alquiler de Viviendas en Castellón – Pisos y Casas"
+  description="Pisos y casas en alquiler en Castellón. Las mejores viviendas disponibles en Benicarló, Vinaròs y Peñíscola. Gestión completa del proceso."
+  whatsappContext="rent"
+>
+
+  <!-- ─── 1. Hero ────────────────────────────────────────────────────────── -->
+  <HeroSection
+    title="Viviendas en alquiler en Castellón"
+    subtitle="Pisos y casas disponibles ahora. Gestión completa del proceso de alquiler. Encuentra tu hogar en Castellón."
+    size="medium"
+    ctaWhatsApp={{ label: 'Consultar disponibilidad', context: 'rent' }}
+    ctaPrimary={{ label: 'Ver alquileres', href: '#alquileres' }}
+  />
+
+  <!-- ─── 2. Listings ───────────────────────────────────────────────────── -->
+  <section id="alquileres" class="py-14 md:py-20 bg-brand-white">
+    <div class="container max-w-6xl mx-auto">
+
+      <!-- Zone filter pills -->
+      <div class="flex flex-wrap gap-2 mb-8" role="navigation" aria-label="Filtrar por zona">
+        {zones.map((z) => (
+          <a
+            href={z.href}
+            class="px-4 py-2 rounded-full text-sm font-medium border transition-colors
+                   border-gray-200 text-gray-700 hover:border-brand-green hover:text-brand-green
+                   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+          >
+            {z.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Result count -->
+      <p class="text-sm text-gray-500 mb-6">
+        {properties.length} {properties.length === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+      </p>
+
+      {properties.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {properties.map((property) => (
+            <PropertyCard property={property} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
+          <span class="text-5xl mb-4 block" aria-hidden="true">🔑</span>
+          <h2 class="font-heading font-semibold text-brand-black text-xl mb-2">
+            Pronto tendremos más alquileres
+          </h2>
+          <p class="text-gray-600 text-sm mb-6 max-w-sm mx-auto">
+            Estamos actualizando nuestro catálogo de alquileres. Déjanos tus datos y te avisamos.
+          </p>
+          <a href="/contacto" class="btn-primary">Avisar cuando haya disponibilidad</a>
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <!-- ─── Landlords CTA ─────────────────────────────────────────────────── -->
+  <section class="py-12 bg-gray-50 border-t border-gray-100">
+    <div class="container max-w-5xl mx-auto text-center">
+      <p class="text-gray-700 font-medium mb-3">
+        ¿Eres propietario y quieres alquilar tu vivienda?
+      </p>
+      <a href="/vender" class="btn-outline">
+        Gestionar mi alquiler
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── CTA block ─────────────────────────────────────────────────────── -->
+  <CTABlock
+    title="¿No encuentras el alquiler que buscas?"
+    subtitle="Cuéntanos qué tipo de vivienda necesitas y dónde. Te encontramos lo que buscas."
+    ctaWhatsApp={{ label: 'Describir lo que necesito', context: 'rent' }}
+    ctaPrimary={{ label: 'Contactar', href: '/contacto' }}
+    variant="light"
+  />
+
+</BaseLayout>
