@@ -75,11 +75,7 @@ const showMessage = variant === 'property' || variant === 'contact'
   novalidate
 >
   
-    data-netlify="true"
-    name={formId}
-    class="flex flex-col gap-4"
-    novalidate
-  >
+    
     {/* Netlify hidden field */}
     <input type="hidden" name="form-name" value={formId} />
 
