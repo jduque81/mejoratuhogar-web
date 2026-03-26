@@ -67,9 +67,14 @@ const showMessage = variant === 'property' || variant === 'contact'
 
   {/* Form */}
   <form
-    id={formId}
-    method="POST"
-    action={action}
+  id={formId}
+  method="POST"
+  data-netlify="true"
+  name={formId}
+  class="flex flex-col gap-4"
+  novalidate
+>
+  
     data-netlify="true"
     name={formId}
     class="flex flex-col gap-4"
