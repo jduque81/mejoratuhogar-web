@@ -1,5 +1,16 @@
----
+----
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import { sanityClient } from '../../lib/sanity'
+
+const properties = await sanityClient.fetch(`
+  *[_type == "property"]{
+    _id,
+    title,
+    price,
+    location,
+    "imageUrl": mainImage.asset->url
+  }
+`)
 ---
 
 <BaseLayout
@@ -10,6 +21,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
     <h1 class="font-heading text-4xl font-bold text-brand-black mb-4">
       Propiedades
     </h1>
-    <p class="text-lg text-gray-500">Listado completo de propiedades — en construcción.</p>
-  </section>
+    {
+  properties.length === 0 ? (
+    <p>No hay propiedades aún.</p>
+  ) : (
+    <div class="grid gap-6 mt-8">
+      {properties.map((property) => (
+        <div class="border p-4 rounded-xl">
+          {property.imageUrl && (
+            <img src={property.imageUrl} alt={property.title} class="w-full h-48 object-cover rounded-lg mb-4" />
+          )}
+          <h2 class="text-xl font-bold">{property.title}</h2>
+          <p>{property.location}</p>
+          <p class="font-semibold">{property.price} €</p>
+        </div>
+      ))}
+    </div>
+  )
+  }
+</section>
 </BaseLayout>

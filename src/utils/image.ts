@@ -1,4 +1,4 @@
-/**
+ /**
  * image.ts — Sanity image URL builder
  *
  * Constructs Sanity CDN image URLs without @sanity/image-url.
@@ -37,8 +37,8 @@ export function sanityImageUrl(
   const ref = image.asset._ref
   if (!ref) return '/images/placeholder.svg'
 
-  const projectId = import.meta.env.SANITY_PROJECT_ID ?? ''
-  const dataset = import.meta.env.SANITY_DATASET ?? 'production'
+  const projectId = 'd95eiezj'
+const dataset = 'production'
 
   // _ref format: "image-{assetId}-{width}x{height}-{ext}"
   // CDN format:  "{assetId}-{width}x{height}.{ext}"
