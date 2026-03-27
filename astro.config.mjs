@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import sanity from '@sanity/astro'
+import sitemap from '@astrojs/sitemap'
 
 export default defineConfig({
   site: 'https://mejoratuhogar.es',
@@ -14,5 +15,6 @@ export default defineConfig({
       apiVersion: '2024-01-01',
       useCdn: true,
     }),
+    sitemap(),
   ],
 })
