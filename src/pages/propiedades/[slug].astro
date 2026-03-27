@@ -155,7 +155,7 @@ const seoDescription = property.seoDescription ?? property.shortDescription ?? `
         <!-- Gallery grid -->
         {galleryImages.length > 0 && (
           <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
-            {galleryImages.slice(0, 8).map((img, i) => (
+            {galleryImages.map((img, i) => (
               <div class="aspect-[4/3] rounded-lg overflow-hidden bg-gray-100">
                 <img
                   src={sanityImageUrl(img, { width: 400, height: 300 })}

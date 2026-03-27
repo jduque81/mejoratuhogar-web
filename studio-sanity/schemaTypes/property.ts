@@ -107,7 +107,7 @@ export const property = defineType({
     }),
     defineField({
       name: 'plotArea',
-      title: 'Superficie parcela (m²)',
+      title: 'Superficie útil (m²)',
       type: 'number',
     }),
     defineField({

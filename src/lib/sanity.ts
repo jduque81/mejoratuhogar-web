@@ -240,7 +240,7 @@ export async function getPropertiesByCity(
 }
 
 export async function getAllPropertySlugs(): Promise<{ slug: SanitySlug }[]> {
-  return sanityClient.fetch(`*[_type == "property"]{ slug }`)
+  return sanityClient.fetch(`*[_type == "property" && defined(slug.current)]{ slug }`)
 }
 
 // ─── Services ─────────────────────────────────────────────────────────────────
