@@ -1,43 +1,89 @@
-----
-import BaseLayout from '../../layouts/BaseLayout.astro'
-import { sanityClient } from '../../lib/sanity'
+---
+/**
+ * propiedades/index.astro — All properties listing (/propiedades)
+ *
+ * Shows all available properties (sale + rent).
+ * CMS-driven with static fallback.
+ */
 
-const properties = await sanityClient.fetch(`
-  *[_type == "property"]{
-    _id,
-    title,
-    price,
-    location,
-    "imageUrl": mainImage.asset->url
-  }
-`)
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import PropertyCard from '../../components/PropertyCard.astro'
+import CTABlock from '../../components/CTABlock.astro'
+import WhatsAppButton from '../../components/WhatsAppButton.astro'
+import { getPropertiesByOperationType } from '../../lib/sanity'
+import { FALLBACK_PROPERTIES } from '../../data/fallback'
+import type { PropertyCard as PropertyCardData } from '../../lib/sanity'
+
+// ─── CMS data with static fallback ───────────────────────────────────────────
+
+let properties: PropertyCardData[] = []
+try {
+  const [sale, rent] = await Promise.all([
+    getPropertiesByOperationType('sale'),
+    getPropertiesByOperationType('rent'),
+  ])
+  properties = [...sale, ...rent]
+} catch {}
+if (!properties.length) {
+  properties = FALLBACK_PROPERTIES
+}
 ---
 
 <BaseLayout
-  title="Propiedades en Castellón – Compra y Alquiler"
-  description="Explora todas las propiedades disponibles en Castellón. Pisos, casas y áticos en venta y alquiler."
+  title="Todas las Propiedades en Castellón – Venta y Alquiler"
+  description="Explora todas las propiedades disponibles en Castellón. Pisos, casas y áticos en venta y alquiler en Benicarló, Vinaròs y Peñíscola."
+  whatsappContext="default"
 >
-  <section class="container py-30 text-center">
-    <h1 class="font-heading text-4xl font-bold text-brand-black mb-4">
-      Propiedades
-    </h1>
-    {
-  properties.length === 0 ? (
-    <p>No hay propiedades aún.</p>
-  ) : (
-    <div class="grid gap-6 mt-8">
-      {properties.map((property) => (
-        <div class="border p-4 rounded-xl">
-          {property.imageUrl && (
-            <img src={property.imageUrl} alt={property.title} class="w-full h-48 object-cover rounded-lg mb-4" />
-          )}
-          <h2 class="text-xl font-bold">{property.title}</h2>
-          <p>{property.location}</p>
-          <p class="font-semibold">{property.price} €</p>
-        </div>
-      ))}
+
+  <!-- ─── Header ────────────────────────────────────────────────────────── -->
+  <section class="py-10 md:py-14 bg-brand-white border-b border-gray-100">
+    <div class="container max-w-6xl mx-auto">
+      <h1 class="font-heading font-bold text-3xl md:text-4xl text-brand-black mb-2">
+        Todas las propiedades
+      </h1>
+      <p class="text-gray-600 text-lg">
+        Venta y alquiler en Benicarló, Vinaròs y Peñíscola.
+      </p>
     </div>
-  )
-  }
-</section>
+  </section>
+
+  <!-- ─── Listings ──────────────────────────────────────────────────────── -->
+  <section class="py-12 md:py-16 bg-gray-50">
+    <div class="container max-w-6xl mx-auto">
+
+      <p class="text-sm text-gray-500 mb-6">
+        {properties.length} {properties.length === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+      </p>
+
+      {properties.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {properties.map((property) => (
+            <PropertyCard property={property} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-20 bg-white rounded-2xl border border-gray-100">
+          <span class="text-5xl mb-4 block" aria-hidden="true">🏠</span>
+          <h2 class="font-heading font-semibold text-brand-black text-xl mb-2">
+            Pronto tendremos más propiedades
+          </h2>
+          <p class="text-gray-600 text-sm mb-6 max-w-sm mx-auto">
+            Estamos actualizando nuestro catálogo. Escríbenos y te avisamos.
+          </p>
+          <WhatsAppButton variant="button" context="default" label="Contactar por WhatsApp" />
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <!-- ─── CTA ───────────────────────────────────────────────────────────── -->
+  <CTABlock
+    title="¿No encuentras lo que buscas?"
+    subtitle="Cuéntanos qué necesitas y te ayudamos a encontrar la vivienda perfecta."
+    ctaWhatsApp={{ label: 'Hablar por WhatsApp', context: 'default' }}
+    ctaPrimary={{ label: 'Contactar', href: '/contacto' }}
+    variant="light"
+  />
+
 </BaseLayout>
