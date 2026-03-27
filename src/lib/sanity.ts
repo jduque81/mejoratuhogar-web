@@ -10,9 +10,14 @@
  *   3. GROQ queries (one function per data need)
  */
 
-import { client } from 'sanity:client'
+import { createClient } from '@sanity/client'
 
-export const sanityClient = client
+export const sanityClient = createClient({
+  projectId: 'd95eiezj',
+  dataset: 'production',
+  apiVersion: '2024-01-01',
+  useCdn: false
+})
 
 // ─── 2. TypeScript types ───────────────────────────────────────────────────────
 
