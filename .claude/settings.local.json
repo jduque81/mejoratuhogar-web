@@ -2,7 +2,29 @@
   "permissions": {
     "allow": [
       "Bash(npm create:*)",
-      "Bash(export PATH=\"/usr/local/bin:/opt/homebrew/bin:$PATH\")"
+      "Bash(export PATH=\"/usr/local/bin:/opt/homebrew/bin:$PATH\")",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(node -e \"const p = require\\(''./package.json''\\); console.log\\(''astro:'', p.dependencies.astro, ''\\\\nsitemap:'', p.dependencies[''@astrojs/sitemap'']\\)\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npx sanity:*)",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s \"https://d95eiezj.api.sanity.io/v2024-01-01/data/query/production?query=*[_type==%22city%22]{name,slug}\" -H \"Authorization: Bearer sk0erETBebXpZzJu3Wdgw3airkZ8je4ITbwDCxevpKfTt4SUTSAGmSIZWtC9HPQWFPDYx8Ei7IDIJBBXS7FnK2BezulEimKXlO9D5wMqU62PHVKS53omCcDa8370x7zthWobkPHlxFJ85qQMS0ZZ9Wex4XZzL6AJpT4PnXJofHHlR3BxEIfh\")",
+      "Bash(curl -s 'https://d95eiezj.api.sanity.io/v2024-01-01/data/query/production?query=*%5B_type%3D%3D%22city%22%5D%7Bname%2Cslug%7D' -H \"Authorization: Bearer sk0erETBebXpZzJu3Wdgw3airkZ8je4ITbwDCxevpKfTt4SUTSAGmSIZWtC9HPQWFPDYx8Ei7IDIJBBXS7FnK2BezulEimKXlO9D5wMqU62PHVKS53omCcDa8370x7zthWobkPHlxFJ85qQMS0ZZ9Wex4XZzL6AJpT4PnXJofHHlR3BxEIfh\")",
+      "Bash(curl -s -X POST \"https://api.netlify.com/api/v1/sites/90f0dbb3-4bc2-4cae-833b-75b7e00f7963/deploys\" -H \"Authorization: Bearer nfp_e3E9L5CAaQZ27CBrmF65LtomFSituSUzc016\" -H \"Content-Type: application/json\" -d '{\"\"\"\"clear_cache\"\"\"\": true}')",
+      "Bash(npx netlify-cli:*)",
+      "Bash(zip -r /tmp/mejoratuhogar-dist.zip dist/)",
+      "Bash(curl -s -X POST \"https://api.netlify.com/api/v1/sites/90f0dbb3-4bc2-4cae-833b-75b7e00f7963/deploys\" -H \"Authorization: Bearer nfp_e3E9L5CAaQZ27CBrmF65LtomFSituSUzc016\" -H \"Content-Type: application/zip\" --data-binary @/tmp/mejoratuhogar-dist.zip)",
+      "Bash(curl -s \"https://api.netlify.com/api/v1/sites/90f0dbb3-4bc2-4cae-833b-75b7e00f7963/deploys/69c6bb9b0fcd6607d88a50ee\" -H \"Authorization: Bearer nfp_e3E9L5CAaQZ27CBrmF65LtomFSituSUzc016\")",
+      "Bash(curl -s -X POST \"https://api.sanity.io/v2021-10-04/hooks/project/d95eiezj\" -H \"Authorization: Bearer sk0erETBebXpZzJu3Wdgw3airkZ8je4ITbwDCxevpKfTt4SUTSAGmSIZWtC9HPQWFPDYx8Ei7IDIJBBXS7FnK2BezulEimKXlO9D5wMqU62PHVKS53omCcDa8370x7zthWobkPHlxFJ85qQMS0ZZ9Wex4XZzL6AJpT4PnXJofHHlR3BxEIfh\" -H \"Content-Type: application/json\" -d '{:*)",
+      "Bash(curl -s 'https://d95eiezj.api.sanity.io/v2024-01-01/data/query/production?query=*%5B_type%3D%3D%22property%22%5D%7Btitle%2Cslug%2CoperationType%2Cstatus%7D' -H \"Authorization: Bearer sk0erETBebXpZzJu3Wdgw3airkZ8je4ITbwDCxevpKfTt4SUTSAGmSIZWtC9HPQWFPDYx8Ei7IDIJBBXS7FnK2BezulEimKXlO9D5wMqU62PHVKS53omCcDa8370x7zthWobkPHlxFJ85qQMS0ZZ9Wex4XZzL6AJpT4PnXJofHHlR3BxEIfh\")",
+      "Bash(curl -s \"https://api.netlify.com/api/v1/sites/90f0dbb3-4bc2-4cae-833b-75b7e00f7963/deploys/69c6c7f1f54d541b35ff061e\" -H \"Authorization: Bearer nfp_e3E9L5CAaQZ27CBrmF65LtomFSituSUzc016\")",
+      "Bash(curl -s 'https://d95eiezj.api.sanity.io/v2024-01-01/data/query/production?query=*%5B_type%3D%3D%22property%22+%26%26+slug.current+%3D%3D+%22piso-en-el-centro-de-benicarlo%22%5D%7Btitle%2CfeaturedImage%7B...%2Casset-%3E%7Burl%7D%7D%2Cimages%5B%5D%7B...%2Casset-%3E%7Burl%7D%7D%7D' -H \"Authorization: Bearer sk0erETBebXpZzJu3Wdgw3airkZ8je4ITbwDCxevpKfTt4SUTSAGmSIZWtC9HPQWFPDYx8Ei7IDIJBBXS7FnK2BezulEimKXlO9D5wMqU62PHVKS53omCcDa8370x7zthWobkPHlxFJ85qQMS0ZZ9Wex4XZzL6AJpT4PnXJofHHlR3BxEIfh\")",
+      "Bash(zip -r /tmp/mejoratuhogar-dist.zip dist/ -x *.DS_Store)",
+      "Bash(curl -s \"https://api.netlify.com/api/v1/sites/90f0dbb3-4bc2-4cae-833b-75b7e00f7963\" -H \"Authorization: Bearer nfp_e3E9L5CAaQZ27CBrmF65LtomFSituSUzc016\")",
+      "Bash(node -e \":*)"
     ]
   }
 }
