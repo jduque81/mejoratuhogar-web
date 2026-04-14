@@ -198,7 +198,7 @@ export async function getPropertiesByOperationType(
   operationType: OperationType
 ): Promise<PropertyCard[]> {
   return sanityClient.fetch(
-    `*[_type == "property" && operationType == $operationType && status == "available"]
+    `*[_type == "property" && operationType == $operationType]
       | order(_createdAt desc) { ${PROPERTY_CARD_FIELDS} }`,
     { operationType }
   )

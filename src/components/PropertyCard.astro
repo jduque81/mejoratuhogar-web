@@ -70,12 +70,10 @@ const typeLabel = PROPERTY_TYPE_LABELS[propertyType] ?? propertyType
       {operationLabel}
     </span>
 
-    <!-- Status badge (only when not available) -->
-    {!isAvailable && (
-      <span class={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold ${statusCfg.color}`}>
-        {statusCfg.label}
-      </span>
-    )}
+    <!-- Status badge -->
+    <span class={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold ${statusCfg.color}`}>
+      {statusCfg.label}
+    </span>
   </div>
 
   <!-- ─── Content ──────────────────────────────────────────────────────── -->

@@ -44,7 +44,7 @@ export const OPERATION_TYPE_LABELS: Record<string, string> = {
 /** Maps Sanity status values to display config */
 export const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
   available: { label: 'Disponible', color: 'text-brand-green bg-green-50' },
-  reserved: { label: 'Reservado', color: 'text-yellow-700 bg-yellow-50' },
-  sold: { label: 'Vendido', color: 'text-red-700 bg-red-50' },
-  rented: { label: 'Alquilado', color: 'text-red-700 bg-red-50' },
+  reserved: { label: 'Reservada', color: 'text-yellow-700 bg-yellow-50' },
+  sold: { label: 'Vendida', color: 'text-red-700 bg-red-50' },
+  rented: { label: 'Alquilada', color: 'text-red-700 bg-red-50' },
 }
