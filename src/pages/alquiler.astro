@@ -18,8 +18,8 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import HeroSection from '../components/HeroSection.astro'
 import PropertyCard from '../components/PropertyCard.astro'
 import CTABlock from '../components/CTABlock.astro'
-import { getPropertiesByOperationType } from '../lib/sanity'
-import { FALLBACK_PROPERTIES } from '../data/fallback'
+import { getPropertiesByOperationType, getAllCities } from '../lib/sanity'
+import { FALLBACK_PROPERTIES, FALLBACK_CITIES } from '../data/fallback'
 import type { PropertyCard as PropertyCardData } from '../lib/sanity'
 
 // ─── CMS data with static fallback ───────────────────────────────────────────
@@ -32,13 +32,14 @@ if (!properties.length) {
   properties = FALLBACK_PROPERTIES.filter((p) => p.operationType === 'rent')
 }
 
-// ─── Zone filter links ────────────────────────────────────────────────────────
+// ─── Zone filter links (dynamic from CMS) ────────────────────────────────────
+
+let cities = await getAllCities().catch(() => [])
+if (!cities.length) cities = FALLBACK_CITIES
 
 const zones = [
   { label: 'Todas las zonas', href: '/alquiler' },
-  { label: 'Benicarló', href: '/zonas/benicarlo' },
-  { label: 'Vinaròs', href: '/zonas/vinaros' },
-  { label: 'Peñíscola', href: '/zonas/peniscola' },
+  ...cities.map((c) => ({ label: c.name, href: `/zonas/${c.slug.current}` })),
 ]
 ---
 
@@ -77,7 +78,7 @@ const zones = [
 
       <!-- Result count -->
       <p class="text-sm text-gray-500 mb-6">
-        {properties.length} {properties.length === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+        {properties.length} {properties.length === 1 ? 'propiedad' : 'propiedades'}
       </p>
 
       {properties.length > 0 ? (

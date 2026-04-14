@@ -45,8 +45,10 @@ const typeLabel = PROPERTY_TYPE_LABELS[propertyType] ?? propertyType
 
 <a
   href={href}
-  class="group flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden
-         transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+  class:list={[
+    "group flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-0.5",
+    { "opacity-70": !isAvailable }
+  ]}
   aria-label={`Ver propiedad: ${title}`}
 >
   <!-- ─── Image ────────────────────────────────────────────────────────── -->
@@ -61,14 +63,16 @@ const typeLabel = PROPERTY_TYPE_LABELS[propertyType] ?? propertyType
       height="400"
     />
 
-    <!-- Operation type badge (Venta / Alquiler) -->
-    <span class={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold
-      ${isRent
-        ? 'bg-blue-600 text-white'
-        : 'bg-brand-green text-white'
-      }`}>
-      {operationLabel}
-    </span>
+    <!-- Operation type badge (Venta / Alquiler) — hidden when property is no longer active -->
+    {isAvailable && (
+      <span class={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold
+        ${isRent
+          ? 'bg-blue-600 text-white'
+          : 'bg-brand-green text-white'
+        }`}>
+        {operationLabel}
+      </span>
+    )}
 
     <!-- Status badge -->
     <span class={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold ${statusCfg.color}`}>
@@ -155,7 +159,7 @@ const typeLabel = PROPERTY_TYPE_LABELS[propertyType] ?? propertyType
   <!-- ─── Card footer CTA ───────────────────────────────────────────────── -->
   <div class="px-5 pb-5">
     <span class="block w-full text-center py-2.5 rounded-lg border border-gray-200 text-sm font-semibold text-brand-black transition-colors group-hover:bg-brand-green group-hover:border-brand-green group-hover:text-white">
-      Ver propiedad
+      {isAvailable ? 'Ver propiedad' : 'Ver opciones similares'}
     </span>
   </div>
 
