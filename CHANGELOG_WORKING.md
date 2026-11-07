@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-11-07
+
+### Security
+- Incident INC-2026-001: Netlify + Sanity tokens found in public repo (`.claude/settings.local.json`, commit `0bbe223`). Details in `SECURITY_INCIDENTS.md`.
+- Sanity token `claude-setup` deleted by owner.
+- `.claude/settings.local.json` removed from Git tracking (local copy kept) and added to `.gitignore`.
+- Full repo + history scan: no other credentials found.
+- Owner revoked Netlify token `render-blobs`; Netlify token `claude` had already expired (2026-04-03).
+
+### Docs
+- `PROJECT_STATE.md`, `CLAUDE_CONTEXT.md`: deploy now documented as GitHub-connected; added security rules and current issues.
+
+### Netlify
+- Found second Netlify site `dynamic-phoenix-50f8ce` linked to the repo; owner unlinked it from GitHub.
+
+### Integration
+- Changes integrated into `main` via PR #1 (deploys to production; no build inputs changed).
+
+### Not done (by decision)
+- Git history not rewritten. CRM not started.
+
+---
+
 ## 2026-03-27 / 2026-03-28
 
 ### Fixed
