@@ -8,7 +8,8 @@
 - Incident INC-2026-001: Netlify + Sanity tokens found in public repo (`.claude/settings.local.json`, commit `0bbe223`). Details in `SECURITY_INCIDENTS.md`.
 - Sanity token `claude-setup` deleted by owner.
 - `.claude/settings.local.json` removed from Git tracking (local copy kept) and added to `.gitignore`.
-- Full repo + history scan: no other credentials found.- Owner revoked Netlify token `render-blobs`; Netlify token `claude` had already expired (2026-04-03).
+- Full repo + history scan: no other credentials found.
+- Owner revoked Netlify token `render-blobs`; Netlify token `claude` had already expired (2026-04-03).
 
 ### Docs
 - `PROJECT_STATE.md`, `CLAUDE_CONTEXT.md`: deploy now documented as GitHub-connected; added security rules and current issues.
