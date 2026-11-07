@@ -1,6 +1,6 @@
 # PROJECT STATE — mejoratuhogar-web
 
-Last updated: 2026-03-31
+Last updated: 2026-11-07
 
 ---
 
@@ -31,7 +31,8 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 - Cookie banner
 - Static fallback data (build does not fail if Sanity is unreachable)
 - Property gallery: shows ALL images (no limit)
-- Netlify deploy workflow: npm run build → zip dist/ → POST to Netlify API
+- Netlify deploy: originally manual (build → zip → API); Netlify now shows the site connected to GitHub (see Current Issues)
+- Listings show all property statuses, with improved UX for non-available properties (2026-04-15)
 - CMS access: Iryna added as Member to Sanity project
 
 ---
@@ -56,8 +57,9 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 
 ## Current Issues
 
-- None blocking. Site builds and deploys cleanly.
-- `.claude/settings.local.json` has uncommitted local changes (permissions) — not critical.
+- **Security (2026-11-07):** Netlify and Sanity tokens were exposed in the public repo via `.claude/settings.local.json`. File is now untracked and gitignored; follow-up items open. See `SECURITY_INCIDENTS.md` (INC-2026-001).
+- **Deploy docs outdated (2026-11-07):** Netlify UI shows the site "Deploys from GitHub with Astro" (last published 2026-04-21). Pushes to `main` likely trigger a production deploy. Production branch, branch-deploy settings and build hooks not yet verified.
+- **Build resilience:** in an environment where Sanity is unreachable at the network level (connection reset), `npm run build` crashes with an unhandled `ECONNRESET` — the static fallback does not cover this case. Not observed on Netlify.
 
 ---
 

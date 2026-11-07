@@ -13,12 +13,15 @@ Instructions for Claude when working on this project.
 - **Explain changes clearly:** before editing a file, say what you are going to change and why.
 - **Always verify before suggesting:** read the file before proposing changes to it.
 
+## Security
+
+- **Never** put tokens/API keys in commands, files or docs. Read them from environment variables.
+- `.claude/settings.local.json` is gitignored: Claude Code stores approved commands there verbatim (it leaked tokens once — see `SECURITY_INCIDENTS.md`).
+
 ## Deploy workflow
 
-1. `npm run build` — build Astro static site
-2. `zip -r /tmp/mejoratuhogar-dist.zip dist/ -x "*.DS_Store"` — zip the dist folder
-3. POST zip to Netlify API with site ID `90f0dbb3-4bc2-4cae-833b-75b7e00f7963`
-4. Poll deploy status until `"state": "ready"`
+- Netlify is connected to GitHub ("Deploys from GitHub"). **Assume any push to `main` deploys to production.** Do not push to `main` without explicit approval.
+- Legacy manual deploy (only if explicitly requested): `npm run build` → zip `dist/` → POST to Netlify API (site ID `90f0dbb3-4bc2-4cae-833b-75b7e00f7963`) with a token from an environment variable → poll until `"state": "ready"`.
 
 ## Key files
 
