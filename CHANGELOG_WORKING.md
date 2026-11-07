@@ -14,8 +14,14 @@
 ### Docs
 - `PROJECT_STATE.md`, `CLAUDE_CONTEXT.md`: deploy now documented as GitHub-connected; added security rules and current issues.
 
+### Netlify
+- Found second Netlify site `dynamic-phoenix-50f8ce` linked to the repo; owner unlinked it from GitHub.
+
+### Integration
+- Changes integrated into `main` via PR #1 (deploys to production; no build inputs changed).
+
 ### Not done (by decision)
-- Git history not rewritten. No deploy. `main` untouched.
+- Git history not rewritten. CRM not started.
 
 ---
 

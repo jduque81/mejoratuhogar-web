@@ -58,7 +58,8 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 ## Current Issues
 
 - **Security (2026-11-07):** Netlify and Sanity tokens were exposed in the public repo via `.claude/settings.local.json`. File is now untracked and gitignored; follow-up items open. See `SECURITY_INCIDENTS.md` (INC-2026-001).
-- **Deploy docs outdated (2026-11-07):** Netlify UI shows the site "Deploys from GitHub with Astro" (last published 2026-04-21). Pushes to `main` likely trigger a production deploy. Production branch, branch-deploy settings and build hooks not yet verified.
+- **Deploy (2026-11-07):** Netlify site `mejoratuhogar-web` (domain mejoratuhogar.es) deploys from GitHub; PR #1 produced a successful Deploy Preview. Pushes to `main` deploy to production. Build hooks / Sanity webhook not verified.
+- **Second Netlify site (2026-11-07):** `dynamic-phoenix-50f8ce` (auto-named, outdated content) was also linked to this repo; owner unlinked it. Deletion pending (check Forms/domain first).
 - **Build resilience:** in an environment where Sanity is unreachable at the network level (connection reset), `npm run build` crashes with an unhandled `ECONNRESET` — the static fallback does not cover this case. Not observed on Netlify.
 
 ---

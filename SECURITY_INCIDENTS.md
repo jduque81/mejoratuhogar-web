@@ -11,7 +11,7 @@ Registro de incidentes de seguridad. **Nunca** escribir aquí valores de credenc
 | Detectado | 2026-11-07 (revisión de accesos) |
 | Expuesto desde | 2026-03-31 (commit `0bbe223`, repo **público**) |
 | Archivo | `.claude/settings.local.json` |
-| Estado | Mitigado parcialmente — ver "Pendiente" |
+| Estado | Mitigado — todos los tokens conocidos revocados/caducados; quedan comprobaciones en "Pendiente" |
 
 ### Qué pasó
 
@@ -36,14 +36,17 @@ Causa raíz: el archivo `*.local.json` no estaba en `.gitignore`, y Claude Code 
 2. 2026-11-07 — Tokens de Netlify revisados: `claude` (caducado 2026-04-03) y `render-blobs` (activo, sin caducidad).
    Por nombre y fechas, el filtrado es **probablemente** `claude`, pero **no está confirmado**.
 3. 2026-11-07 — `.claude/settings.local.json` eliminado del seguimiento de Git y añadido a `.gitignore`
-   (rama `claude/mejoratuhogar-access-check-3wt0ka`).
-
+   (rama `claude/mejoratuhogar-access-check-3wt0ka`, integrado mediante PR #1).
 4. 2026-11-07 — Token de Netlify `render-blobs` eliminado por el propietario. Con esto, ambos tokens candidatos de Netlify están inutilizados.
+5. 2026-11-07 — Detectado un segundo sitio de Netlify (`dynamic-phoenix-50f8ce`, nombre autogenerado, contenido desfasado) conectado a este repo. Desconectado de GitHub por el propietario ("Not linked").
+
 ### Pendiente
 
 - [ ] Comprobar que no queda ningún otro token en sanity.io/manage → API → Tokens.
 - [ ] Los tokens **siguen en el historial público** (`0bbe223`). Tras revocarlos son inútiles; reescribir el historial es opcional y no se ha hecho.
 - [ ] Revisar el log de deploys de Netlify y el historial de documentos de Sanity entre 2026-03-31 y la revocación en busca de actividad no reconocida.
+- [ ] Decidir si se borra el sitio `dynamic-phoenix-50f8ce` (antes, comprobar si tiene envíos en Forms o dominio asociado).
+- [ ] Equipos locales (Mac): antes de hacer pull de `main`, conservar los permisos útiles de `.claude/settings.local.json` **sin** las reglas con tokens; el pull borra o bloquea ese archivo.
 
 ### Prevención
 
