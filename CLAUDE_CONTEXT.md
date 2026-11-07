@@ -17,7 +17,6 @@ Instructions for Claude when working on this project.
 
 - **Never** put tokens/API keys in commands, files or docs. Read them from environment variables.
 - `.claude/settings.local.json` is gitignored: Claude Code stores approved commands there verbatim (it leaked tokens once — see `SECURITY_INCIDENTS.md`).
-
 ## Deploy workflow
 
 - Netlify is connected to GitHub ("Deploys from GitHub"). **Assume any push to `main` deploys to production.** Do not push to `main` without explicit approval.

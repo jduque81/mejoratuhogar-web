@@ -38,10 +38,10 @@ Causa raíz: el archivo `*.local.json` no estaba en `.gitignore`, y Claude Code 
 3. 2026-11-07 — `.claude/settings.local.json` eliminado del seguimiento de Git y añadido a `.gitignore`
    (rama `claude/mejoratuhogar-access-check-3wt0ka`).
 
+4. 2026-11-07 — Token de Netlify `render-blobs` eliminado por el propietario. Con esto, ambos tokens candidatos de Netlify están inutilizados.
 ### Pendiente
 
-- [ ] Confirmar que `claude-setup` era el token filtrado de Sanity (comprobar que no queda ningún otro token en sanity.io/manage → API → Tokens).
-- [ ] Confirmar o rotar `render-blobs` en Netlify (antes, identificar qué servicio lo usa).
+- [ ] Comprobar que no queda ningún otro token en sanity.io/manage → API → Tokens.
 - [ ] Los tokens **siguen en el historial público** (`0bbe223`). Tras revocarlos son inútiles; reescribir el historial es opcional y no se ha hecho.
 - [ ] Revisar el log de deploys de Netlify y el historial de documentos de Sanity entre 2026-03-31 y la revocación en busca de actividad no reconocida.
 
