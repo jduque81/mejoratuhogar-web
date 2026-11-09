@@ -233,7 +233,7 @@ export async function getPropertiesByCity(
 ): Promise<PropertyCard[]> {
   const typeFilter = operationType ? `&& operationType == "${operationType}"` : ''
   return sanityClient.fetch(
-    `*[_type == "property" && city._ref == $cityId && status == "available" ${typeFilter}]
+    `*[_type == "property" && city._ref == $cityId ${typeFilter}]
       | order(_createdAt desc) { ${PROPERTY_CARD_FIELDS} }`,
     { cityId }
   )
