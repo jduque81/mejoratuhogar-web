@@ -56,7 +56,7 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 - Blog full implementation (schema + content)
 - Property search/filter on listing pages
 - Google Analytics or any analytics integration
-- 9 new cities created in Sanity Studio (Càlig, Sant Jordi, Traiguera, Alcalà de Xivert, Alcanar, Ulldecona, Oropesa del Mar, Benicàssim, Castellón) — fallback defined, Sanity documents pending
+- 8 new cities created in Sanity Studio (Sant Jordi, Traiguera, Alcalà de Xivert, Alcanar, Ulldecona, Oropesa del Mar, Benicàssim, Castellón) — fallback defined, Sanity documents pending
 
 ---
 
@@ -88,10 +88,10 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 | SEO meta tags | Working |
 | Cookie banner | Working |
 | Sanity Studio (Iryna access) | Working |
-| Netlify deploy (manual) | Working |
+| Netlify deploy from GitHub (push to `main`) | Working |
 | Sanity → Netlify auto-deploy (webhook) | Working |
 | City/zones fully dynamic (no hardcoding) | Working |
-| 12-city expansion (fallback defined) | Partial — 3 live in Sanity, 9 pending Studio creation |
+| 12-city expansion (fallback defined) | Partial — 4 live in Sanity (Benicarló, Càlig, Peñíscola, Vinaròs), 8 pending Studio creation |
 | Property publish → live site (Càlig test) | Confirmed working end-to-end |
 | All-status property listings | Working |
 | Status badge on all property cards | Working |

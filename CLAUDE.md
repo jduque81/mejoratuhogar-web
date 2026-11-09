@@ -13,6 +13,14 @@ Project context and conventions for Claude Code sessions.
 
 ---
 
+## Security
+
+- Never put tokens or API keys in commands, files or docs — read them from environment variables.
+- `.claude/settings.local.json` is gitignored and must stay untracked (it leaked tokens once).
+- Full rules in `CLAUDE_CONTEXT.md`; incident history in `SECURITY_INCIDENTS.md`.
+
+---
+
 ## Key conventions
 
 ### Data fetching

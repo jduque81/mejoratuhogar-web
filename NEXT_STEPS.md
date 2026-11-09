@@ -1,6 +1,12 @@
 # NEXT STEPS — mejoratuhogar-web
 
-Last updated: 2026-04-14
+Last updated: 2026-11-09
+
+---
+
+## Next objective — CRM for Iryna
+
+Scope to be defined.
 
 ---
 
@@ -36,13 +42,12 @@ Property `adosado-en-alquiler-en-calig-larga-duracion` was published correctly i
 
 ---
 
-## Immediate action — Create 9 city documents in Sanity Studio
+## Immediate action — Create 8 city documents in Sanity Studio
 
-The fallback and dynamic code is ready. The 9 new cities need to be created in Sanity Studio to go live:
+The fallback and dynamic code is ready. Càlig already exists in Sanity (fix its name to "Càlig" — it currently shows as "Calig"). The 8 remaining cities need to be created in Sanity Studio to go live:
 
 | City | Slug to use |
 |---|---|
-| Càlig | `calig` |
 | Sant Jordi | `sant-jordi` |
 | Traiguera | `traiguera` |
 | Alcalà de Xivert | `alcala-de-xivert` |
