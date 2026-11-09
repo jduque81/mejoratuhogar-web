@@ -70,10 +70,10 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 
 - **Security (2026-11-07):** Netlify and Sanity tokens were exposed in the public repo via `.claude/settings.local.json`. File is now untracked and gitignored; follow-up items open. See `SECURITY_INCIDENTS.md` (INC-2026-001).
 - **Deploy (2026-11-07):** Netlify site `mejoratuhogar-web` (domain mejoratuhogar.es) deploys from GitHub; PR #1 produced a successful Deploy Preview. Pushes to `main` deploy to production. Build hooks / Sanity webhook not verified.
-- **Second Netlify site (2026-11-07):** `dynamic-phoenix-50f8ce` (auto-named, outdated content) was also linked to this repo; owner unlinked it. Deletion pending (check Forms/domain first).
+- **Second Netlify site (2026-11-07):** `dynamic-phoenix-50f8ce` (auto-named, outdated content) was also linked to this repo; owner unlinked it. RESOLVED 2026-11-09: deleted after checking it had no custom domain, forms, submissions or repo.
 - **Peñíscola demo properties (2026-11-09):** zone pages filled cities with no Sanity properties with `FALLBACK_PROPERTIES`, linking to 2 non-existent pages (404). RESOLVED by PR #4 (`6a4fb3b`): Peñíscola now shows the empty state; verified in production.
 - **Càlig name (2026-11-09):** stored in Sanity as "Calig" (no accent) — fix in Studio.
-- **Netlify Forms (2026-11-09):** 5 forms render with `form-name` on production (`contact-page-form`, `property-contact`, `property-contact-mobile`, `vender-form`, `pvc-form`); registration/notifications in the Netlify dashboard not verified (needs owner login). No test submission sent.
+- **Netlify Forms (2026-11-09):** 5 forms render with `form-name` on production (`contact-page-form`, `property-contact`, `property-contact-mobile`, `vender-form`, `pvc-form`); all 5 registered in Netlify; one email notification on every submission to `ventas@mejoratuhogar.es` (domain has MX). Real submissions received (contacto, vender; latest 2026-09-03). Inbox delivery not checked from here. No test submission sent.
 - **Build resilience:** in an environment where Sanity is unreachable at the network level (connection reset), `npm run build` crashes with an unhandled `ECONNRESET` — the static fallback does not cover this case. Not observed on Netlify.
 
 ---
@@ -83,7 +83,7 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 | Feature | Status |
 |---|---|
 | Sanity CMS data on all pages | Working |
-| Contact form (Netlify Forms) | Working |
+| Contact form (Netlify Forms) | Working — 5 forms registered, email notification to ventas@ |
 | WhatsApp button | Working |
 | Property detail page with full gallery | Working |
 | Zonas pages (dynamic) | Working |
