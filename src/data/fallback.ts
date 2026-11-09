@@ -44,11 +44,30 @@ const IMG_COCINA = localImg(
 )
 
 // ─── Fallback city objects (exported for zone page getStaticPaths + fallback) ─
+//
+// This list mirrors the cities created in Sanity Studio.
+// When Sanity is reachable, getAllCities() drives everything dynamically.
+// This fallback ensures the build never fails and static paths are generated
+// even without a CMS connection.
+//
+// To add a new city: create it in Sanity Studio, then add a matching entry here.
 
 export const FALLBACK_CITIES = [
-  { _id: 'city-benicarlo', name: 'Benicarló', slug: { _type: 'slug' as const, current: 'benicarlo' } },
-  { _id: 'city-vinaros',   name: 'Vinaròs',   slug: { _type: 'slug' as const, current: 'vinaros'   } },
-  { _id: 'city-peniscola', name: 'Peñíscola',  slug: { _type: 'slug' as const, current: 'peniscola' } },
+  // Core — Baix Maestrat / Montsià
+  { _id: 'city-benicarlo',      name: 'Benicarló',      slug: { _type: 'slug' as const, current: 'benicarlo'      } },
+  { _id: 'city-vinaros',        name: 'Vinaròs',        slug: { _type: 'slug' as const, current: 'vinaros'        } },
+  { _id: 'city-peniscola',      name: 'Peñíscola',      slug: { _type: 'slug' as const, current: 'peniscola'      } },
+  { _id: 'city-calig',          name: 'Càlig',          slug: { _type: 'slug' as const, current: 'calig'          } },
+  { _id: 'city-sant-jordi',     name: 'Sant Jordi',     slug: { _type: 'slug' as const, current: 'sant-jordi'     } },
+  { _id: 'city-traiguera',      name: 'Traiguera',      slug: { _type: 'slug' as const, current: 'traiguera'      } },
+  { _id: 'city-alcala-de-xivert', name: 'Alcalà de Xivert', slug: { _type: 'slug' as const, current: 'alcala-de-xivert' } },
+  // Montsià (Tarragona border)
+  { _id: 'city-alcanar',        name: 'Alcanar',        slug: { _type: 'slug' as const, current: 'alcanar'        } },
+  { _id: 'city-ulldecona',      name: 'Ulldecona',      slug: { _type: 'slug' as const, current: 'ulldecona'      } },
+  // Costa Azahar south
+  { _id: 'city-oropesa-del-mar', name: 'Oropesa del Mar', slug: { _type: 'slug' as const, current: 'oropesa-del-mar' } },
+  { _id: 'city-benicassim',     name: 'Benicàssim',     slug: { _type: 'slug' as const, current: 'benicassim'     } },
+  { _id: 'city-castellon',      name: 'Castellón',      slug: { _type: 'slug' as const, current: 'castellon'      } },
 ]
 
 // ─── Fallback cities ──────────────────────────────────────────────────────────
