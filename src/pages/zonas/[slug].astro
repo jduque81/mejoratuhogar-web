@@ -72,7 +72,7 @@ const rentProperties = properties.filter((p) => p.operationType === 'rent')
 const seoTitle = cityMeta?.seoTitle ?? `Viviendas en ${cityName} – Compra y Alquiler`
 const seoDescription =
   cityMeta?.seoDescription ??
-  `Propiedades en venta y alquiler en ${cityName}. ${properties.length} viviendas disponibles. Asesoramiento local gratuito.`
+  `Propiedades en venta y alquiler en ${cityName}. ${properties.length} propiedades. Asesoramiento local gratuito.`
 ---
 
 <BaseLayout
@@ -106,7 +106,7 @@ const seoDescription =
                     En venta en {cityName}
                   </h2>
                   <p class="text-sm text-gray-500">
-                    {saleProperties.length} {saleProperties.length === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+                    {saleProperties.length} {saleProperties.length === 1 ? 'propiedad' : 'propiedades'}
                   </p>
                 </div>
                 <a href="/comprar" class="shrink-0 text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors hidden sm:block">
@@ -128,7 +128,7 @@ const seoDescription =
                     En alquiler en {cityName}
                   </h2>
                   <p class="text-sm text-gray-500">
-                    {rentProperties.length} {rentProperties.length === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+                    {rentProperties.length} {rentProperties.length === 1 ? 'propiedad' : 'propiedades'}
                   </p>
                 </div>
                 <a href="/alquiler" class="shrink-0 text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors hidden sm:block">
