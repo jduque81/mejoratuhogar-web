@@ -1,25 +1,16 @@
 # NEXT STEPS — mejoratuhogar-web
 
-Last updated: 2026-03-31
+Last updated: 2026-04-14
 
 ---
 
-## Priority 1 — Automatic deploy from Sanity (immediate)
+## ~~Priority 1 — Automatic deploy from Sanity~~ — DONE
 
-When Iryna publishes a property in Sanity Studio, the site should rebuild automatically.
-
-Steps:
-1. Create a Netlify build hook (Netlify → Site → Settings → Build & Deploy → Build hooks → Add)
-2. Copy the hook URL
-3. Create a Sanity webhook (sanity.io/manage → project → API → Webhooks → Add)
-   - URL: the Netlify hook URL
-   - Dataset: production
-   - Trigger on: create, update, delete
-4. Test: publish something in Studio → site rebuilds in ~2 min
+Sanity webhook → Netlify build hook configured and working. Publishing in Studio triggers an automatic site rebuild.
 
 ---
 
-## Priority 2 — Blog
+## Priority 1 — Blog
 
 The `/blog` page exists but is a placeholder.
 
@@ -31,7 +22,7 @@ Steps:
 
 ---
 
-## Priority 3 — Admin panel in the website
+## Priority 2 — Admin panel in the website
 
 Build a `/admin` section so Iryna can publish properties directly from mejoratuhogar without using Sanity Studio.
 
@@ -39,8 +30,34 @@ Approach to decide: Astro SSR + Sanity write API, or embed Sanity Studio inside 
 
 ---
 
+## ~~Càlig property issue~~ — RESOLVED
+
+Property `adosado-en-alquiler-en-calig-larga-duracion` was published correctly in Sanity and Netlify deploy triggered as expected. Page was not visible in localhost only because Astro dev server cached static paths from before publication. Fix: restart `npm run dev`. No code changes needed. Full publish-to-live flow confirmed working.
+
+---
+
+## Immediate action — Create 9 city documents in Sanity Studio
+
+The fallback and dynamic code is ready. The 9 new cities need to be created in Sanity Studio to go live:
+
+| City | Slug to use |
+|---|---|
+| Càlig | `calig` |
+| Sant Jordi | `sant-jordi` |
+| Traiguera | `traiguera` |
+| Alcalà de Xivert | `alcala-de-xivert` |
+| Alcanar | `alcanar` |
+| Ulldecona | `ulldecona` |
+| Oropesa del Mar | `oropesa-del-mar` |
+| Benicàssim | `benicassim` |
+| Castellón | `castellon` |
+
+Steps per city in Studio: New document → City → fill Name + Slug (use the slug above) → Publish.
+Once published, the Sanity webhook fires → Netlify rebuilds → city page and zone pills go live automatically.
+
+---
+
 ## Lower priority
 
 - Property search/filter on listing pages
 - Analytics (Google Analytics or Plausible)
-- More cities in Sanity

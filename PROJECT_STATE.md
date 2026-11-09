@@ -32,15 +32,20 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 - Static fallback data (build does not fail if Sanity is unreachable)
 - Property gallery: shows ALL images (no limit)
 - Netlify deploy: originally manual (build → zip → API); Netlify now shows the site connected to GitHub (see Current Issues)
-- Listings show all property statuses, with improved UX for non-available properties (2026-04-15)
+- Sanity → Netlify auto-deploy: Sanity webhook triggers Netlify build hook on publish — site rebuilds automatically when content is created, updated, or deleted in Studio
 - CMS access: Iryna added as Member to Sanity project
+- City/zones fully dynamic: zone pages, zone pills on /comprar and /alquiler, and footer city links all driven by Sanity — adding a city in the CMS automatically propagates everywhere
+- Supported city set defined in `FALLBACK_CITIES` (12 cities): Benicarló, Vinaròs, Peñíscola, Càlig, Sant Jordi, Traiguera, Alcalà de Xivert, Alcanar, Ulldecona, Oropesa del Mar, Benicàssim, Castellón — city documents must be created in Sanity Studio to activate them on the live site
+- Property listings show all statuses (available, reserved, rented, sold) — no status filter in queries
+- PropertyCard displays status badge on all cards; non-available cards have reduced opacity, no operation badge, and CTA "Ver opciones similares"
+- Status labels use feminine forms: Disponible, Reservada, Alquilada, Vendida
+- Listing count text is neutral ("X propiedades") — no longer says "disponibles"
 
 ---
 
 ## Partially Implemented
 
 - **Blog:** page exists (`/blog`) but shows placeholder — no Sanity schema or content yet
-- **Zonas:** only 3 cities in Sanity (Benicarló, Peñíscola, Vinaròs) — needs more content
 - **Similar properties:** shows up to 3 by operation type — no filtering by city or type yet
 
 ---
@@ -51,7 +56,13 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 - Blog full implementation (schema + content)
 - Property search/filter on listing pages
 - Google Analytics or any analytics integration
-- Automatic Netlify deploy triggered from Sanity webhook (currently deploy is manual)
+- 9 new cities created in Sanity Studio (Càlig, Sant Jordi, Traiguera, Alcalà de Xivert, Alcanar, Ulldecona, Oropesa del Mar, Benicàssim, Castellón) — fallback defined, Sanity documents pending
+
+---
+
+## Known Behaviour — Not a Bug
+
+- **`astro dev` static path caching:** `getStaticPaths()` is computed once at dev server start and cached for the session. If a property is published in Sanity after the dev server started, its route won't exist until the server is restarted (`npm run dev`). This is normal Astro SSG behaviour — the production build always fetches fresh and is not affected.
 
 ---
 
@@ -78,3 +89,9 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 | Cookie banner | Working |
 | Sanity Studio (Iryna access) | Working |
 | Netlify deploy (manual) | Working |
+| Sanity → Netlify auto-deploy (webhook) | Working |
+| City/zones fully dynamic (no hardcoding) | Working |
+| 12-city expansion (fallback defined) | Partial — 3 live in Sanity, 9 pending Studio creation |
+| Property publish → live site (Càlig test) | Confirmed working end-to-end |
+| All-status property listings | Working |
+| Status badge on all property cards | Working |

@@ -25,6 +25,59 @@
 
 ---
 
+## 2026-04-15
+
+### Fixed — Property listing status filter
+- `getPropertiesByOperationType` (`src/lib/sanity.ts`) — removed `&& status == "available"` filter; all properties now returned regardless of status
+- Root cause: Càlig property (`adosado-en-alquiler-en-calig-larga-duracion`) was published but had status ≠ `available`, so it appeared on its detail page but was excluded from every listing
+
+### Improved — PropertyCard UX for non-available properties (`src/components/PropertyCard.astro`)
+- Operation badge (Venta/Alquiler) hidden when property is not available
+- Status badge always shown on all cards
+- Non-available cards rendered at `opacity-70` for visual distinction
+- CTA text: `"Ver propiedad"` → `"Ver opciones similares"` for non-available
+
+### Fixed — Status labels (`src/utils/format.ts`)
+- Labels corrected to feminine: `Reservada`, `Alquilada`, `Vendida`
+
+### Fixed — Listing count text (`comprar.astro`, `alquiler.astro`, `propiedades/index.astro`)
+- Removed "disponibles" from count — now neutral: "X propiedades"
+
+### Commits
+- `335ce93` show all property statuses in listings and fix status badge labels
+- `61a9cbb` improve UX for non-available property cards in listings
+
+---
+
+## 2026-04-14 (session 2)
+
+### Confirmed working (no code changes)
+- Sanity publish → Netlify webhook → site rebuild flow tested end-to-end with real property (`adosado-en-alquiler-en-calig-larga-duracion` in Càlig). Property appeared correctly on live site after Netlify rebuild.
+- Localhost 404 for new property was not a bug: Astro dev server caches `getStaticPaths()` results at startup. Restarting `npm run dev` after publishing resolves it. Production unaffected.
+
+---
+
+## 2026-04-14 (session 1)
+
+### Configured (external)
+- Sanity → Netlify auto-deploy confirmed working: publishing in Studio triggers automatic site rebuild via webhook + build hook. No manual deploys needed.
+
+### Made dynamic (code)
+- `comprar.astro` — zone filter pills now built from `getAllCities()` at build time (fallback: FALLBACK_CITIES)
+- `alquiler.astro` — same
+- `Footer.astro` — city links now built from `getAllCities()` at build time (fallback: FALLBACK_CITIES)
+- Adding a city in Sanity Studio now propagates automatically to: zone page, zone pills on /comprar and /alquiler, footer links
+
+### Expanded city set
+- `src/data/fallback.ts` — FALLBACK_CITIES expanded from 3 to 12 cities
+- New cities defined (slugs locked): Càlig (`calig`), Sant Jordi (`sant-jordi`), Traiguera (`traiguera`), Alcalà de Xivert (`alcala-de-xivert`), Alcanar (`alcanar`), Ulldecona (`ulldecona`), Oropesa del Mar (`oropesa-del-mar`), Benicàssim (`benicassim`), Castellón (`castellon`)
+- **Pending:** 9 city documents must be created in Sanity Studio to activate them on the live site
+
+### Commits
+- `0bbe223` save project state before restart
+
+---
+
 ## 2026-03-27 / 2026-03-28
 
 ### Fixed

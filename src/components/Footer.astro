@@ -8,15 +8,20 @@
  */
 
 import { SITE } from '../data/site'
+import { getAllCities } from '../lib/sanity'
+import { FALLBACK_CITIES } from '../data/fallback'
 
 const currentYear = new Date().getFullYear()
+
+let cities = await getAllCities().catch(() => [])
+if (!cities.length) cities = FALLBACK_CITIES
 
 const serviceLinks = [
   { label: 'Comprar vivienda', href: '/comprar' },
   { label: 'Vender vivienda', href: '/vender' },
   { label: 'Alquiler', href: '/alquiler' },
   { label: 'Ventanas y puertas PVC', href: '/ventanas-pvc' },
-  { label: 'Nuestras zonas', href: '/zonas/benicarlo' },
+  ...cities.map((c) => ({ label: c.name, href: `/zonas/${c.slug.current}` })),
 ]
 
 const companyLinks = [
