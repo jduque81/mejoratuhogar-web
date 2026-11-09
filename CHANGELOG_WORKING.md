@@ -15,9 +15,13 @@
 - Forms (contacto, vender, ventanas-pvc, property contact) render with Netlify `form-name`; not submitted.
 - Git: no secrets in tracked files or recent history; `.claude/settings.local.json` untracked and gitignored.
 
-### Fixed — Peñíscola 404 links (branch `fix/zonas-sin-demo`, pending PR)
+### Fixed — Peñíscola 404 links (PR #4, `6a4fb3b`)
 - Cause: `/zonas/[slug]` used `FALLBACK_PROPERTIES` whenever a Sanity city had 0 properties; Peñíscola has none, so it showed 2 demo cards linking to non-generated pages.
 - Fix: demo fallback only when the city can't be loaded from Sanity; otherwise the existing empty state is shown.
+- Deploy Preview #4 checks passed; production `main@6a4fb3b` Published. Re-check: 24 sitemap pages and 22 internal links return 200; Peñíscola shows the empty state; other zones unchanged.
+
+### Tooling
+- GitHub CLI installed in `~/.local/bin` (official release, checksum verified) and authenticated via device flow; token in macOS keychain.
 
 ---
 

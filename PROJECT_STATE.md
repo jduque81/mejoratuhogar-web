@@ -71,9 +71,9 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 - **Security (2026-11-07):** Netlify and Sanity tokens were exposed in the public repo via `.claude/settings.local.json`. File is now untracked and gitignored; follow-up items open. See `SECURITY_INCIDENTS.md` (INC-2026-001).
 - **Deploy (2026-11-07):** Netlify site `mejoratuhogar-web` (domain mejoratuhogar.es) deploys from GitHub; PR #1 produced a successful Deploy Preview. Pushes to `main` deploy to production. Build hooks / Sanity webhook not verified.
 - **Second Netlify site (2026-11-07):** `dynamic-phoenix-50f8ce` (auto-named, outdated content) was also linked to this repo; owner unlinked it. Deletion pending (check Forms/domain first).
-- **Peñíscola demo properties (2026-11-09):** zone pages filled cities with no Sanity properties with `FALLBACK_PROPERTIES`, linking to 2 non-existent pages (404). Fixed on branch `fix/zonas-sin-demo` — pending PR review/merge.
+- **Peñíscola demo properties (2026-11-09):** zone pages filled cities with no Sanity properties with `FALLBACK_PROPERTIES`, linking to 2 non-existent pages (404). RESOLVED by PR #4 (`6a4fb3b`): Peñíscola now shows the empty state; verified in production.
 - **Càlig name (2026-11-09):** stored in Sanity as "Calig" (no accent) — fix in Studio.
-- **Netlify Forms (2026-11-09):** forms render with `form-name` on production; registration/notifications in the Netlify dashboard not verified (needs owner login). No test submission sent.
+- **Netlify Forms (2026-11-09):** 5 forms render with `form-name` on production (`contact-page-form`, `property-contact`, `property-contact-mobile`, `vender-form`, `pvc-form`); registration/notifications in the Netlify dashboard not verified (needs owner login). No test submission sent.
 - **Build resilience:** in an environment where Sanity is unreachable at the network level (connection reset), `npm run build` crashes with an unhandled `ECONNRESET` — the static fallback does not cover this case. Not observed on Netlify.
 
 ---
@@ -91,8 +91,8 @@ All data fetching is in `src/lib/sanity.ts`. No direct Sanity calls from pages/c
 | SEO meta tags | Working |
 | Cookie banner | Working |
 | Sanity Studio (Iryna access) | Working |
-| Netlify deploy from GitHub (push to `main`) | Working — `main@275e0a6` Published (2026-11-09) |
-| Production check 2026-11-09: 24 sitemap pages, footer zone links, Càlig rented property | Working (except Peñíscola 404 links, see Current Issues) |
+| Netlify deploy from GitHub (push to `main`) | Working — `main@6a4fb3b` Published (2026-11-09) |
+| Production check 2026-11-09: 24 sitemap pages, 22 internal links, footer zone links, Càlig rented property, Peñíscola empty state | Working — no 404s |
 | Sanity → Netlify auto-deploy (webhook) | Working |
 | City/zones fully dynamic (no hardcoding) | Working |
 | 12-city expansion (fallback defined) | Partial — 4 live in Sanity (Benicarló, Càlig, Peñíscola, Vinaròs), 8 pending Studio creation |
