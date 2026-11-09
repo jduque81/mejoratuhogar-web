@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-11-09
+
+### Merged and deployed
+- PR #2 (`fda3200`): footer city links from Sanity, 12 fallback cities, `CLAUDE.md`, docs.
+- PR #3 (`275e0a6`): zone pages show all property statuses; neutral count/SEO text ("X propiedades").
+- Netlify production: `main@275e0a6` Published.
+
+### Production verification (mejoratuhogar.es)
+- 24 sitemap pages return 200; footer shows 4 zone links (Benicarló, Calig, Peñíscola, Vinaròs) on every page, all resolve.
+- `/zonas/calig`: 1 property (`adosado-en-alquiler-en-calig-larga-duracion`) with "Alquilada" badge and "Ver opciones similares".
+- Forms (contacto, vender, ventanas-pvc, property contact) render with Netlify `form-name`; not submitted.
+- Git: no secrets in tracked files or recent history; `.claude/settings.local.json` untracked and gitignored.
+
+### Fixed — Peñíscola 404 links (branch `fix/zonas-sin-demo`, pending PR)
+- Cause: `/zonas/[slug]` used `FALLBACK_PROPERTIES` whenever a Sanity city had 0 properties; Peñíscola has none, so it showed 2 demo cards linking to non-generated pages.
+- Fix: demo fallback only when the city can't be loaded from Sanity; otherwise the existing empty state is shown.
+
+---
+
 ## 2026-11-07
 
 ### Security
