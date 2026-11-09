@@ -8,7 +8,7 @@ Last updated: 2026-11-09
 
 1. ~~Merge the `fix/zonas-sin-demo` PR (Peñíscola 404 links)~~ — DONE: PR #4, verified in production.
 2. In Sanity Studio: rename "Calig" → "Càlig"; add properties to Peñíscola when available.
-3. In the Netlify dashboard: confirm Forms are registered with email notifications; delete `dynamic-phoenix-50f8ce` (check Forms/domain first).
+3. ~~Netlify: confirm Forms + notifications; delete `dynamic-phoenix-50f8ce`~~ — DONE 2026-11-09 (optional: confirm the notification emails arrive in the ventas@ inbox).
 
 ---
 

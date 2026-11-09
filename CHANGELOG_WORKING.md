@@ -22,6 +22,11 @@
 
 ### Tooling
 - GitHub CLI installed in `~/.local/bin` (official release, checksum verified) and authenticated via device flow; token in macOS keychain.
+- Netlify checks done with Netlify CLI (`npx netlify-cli`) using the existing local login; no tokens written to the repo.
+
+### Netlify
+- Forms: 5 forms registered (`contact-page-form`, `vender-form`, `pvc-form`, `property-contact`, `property-contact-mobile`); email notification on every submission to `ventas@mejoratuhogar.es`. No test submission sent.
+- Deleted unused site `dynamic-phoenix-50f8ce` (no custom domain, forms, submissions or repo; approved by owner).
 
 ---
 

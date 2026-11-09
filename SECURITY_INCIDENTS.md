@@ -45,7 +45,7 @@ Causa raíz: el archivo `*.local.json` no estaba en `.gitignore`, y Claude Code 
 - [ ] Comprobar que no queda ningún otro token en sanity.io/manage → API → Tokens.
 - [ ] Los tokens **siguen en el historial público** (`0bbe223`). Tras revocarlos son inútiles; reescribir el historial es opcional y no se ha hecho.
 - [ ] Revisar el log de deploys de Netlify y el historial de documentos de Sanity entre 2026-03-31 y la revocación en busca de actividad no reconocida.
-- [ ] Decidir si se borra el sitio `dynamic-phoenix-50f8ce` (antes, comprobar si tiene envíos en Forms o dominio asociado).
+- [x] Decidir si se borra el sitio `dynamic-phoenix-50f8ce` (antes, comprobar si tiene envíos en Forms o dominio asociado). Borrado el 2026-11-09: sin dominio, formularios, envíos ni repo.
 - [ ] Equipos locales (Mac): antes de hacer pull de `main`, conservar los permisos útiles de `.claude/settings.local.json` **sin** las reglas con tokens; el pull borra o bloquea ese archivo.
 
 ### Prevención
