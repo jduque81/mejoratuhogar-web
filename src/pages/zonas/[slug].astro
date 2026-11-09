@@ -58,8 +58,6 @@ if (!cityMeta) {
   const fallback = FALLBACK_CITIES.find((c) => c.slug.current === slug)
   if (!fallback) return Astro.redirect('/comprar')
   cityName = fallback.name
-}
-if (!properties.length) {
   properties = FALLBACK_PROPERTIES.filter((p) => p.city.slug.current === slug)
 }
 
