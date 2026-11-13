@@ -98,16 +98,16 @@
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-black;
   }
 
-  /* WhatsApp-branded button — #25D366 green */
+  /* WhatsApp button — WhatsApp's dark teal green: white text reaches 7.6:1 (WCAG AA). The bright #25D366 gave only 2:1. */
   .btn-whatsapp {
     @apply inline-flex items-center justify-center gap-2
            px-6 py-3 rounded-lg
            text-white font-sans font-semibold text-base
            transition-colors duration-200
            focus-visible:outline-2 focus-visible:outline-offset-2;
-    background-color: #25D366;
+    background-color: #075E54;
   }
   .btn-whatsapp:hover {
-    background-color: #1da851;
+    background-color: #054A42;
   }
 }
